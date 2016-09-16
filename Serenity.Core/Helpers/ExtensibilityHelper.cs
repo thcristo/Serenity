@@ -33,7 +33,7 @@ namespace Serenity.Extensibility
             foreach (var assembly in assemblies ?? SelfAssemblies)
             {
                 foreach (var type in assembly.GetTypes())
-                    if (!type.IsInterface &&
+                    if (!type.GetIsInterface() &&
                         intf.IsAssignableFrom(type))
                         yield return type;
             }

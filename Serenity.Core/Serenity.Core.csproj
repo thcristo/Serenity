@@ -48,6 +48,7 @@
     <Compile Include="Authorization\IImpersonator.cs" />
     <Compile Include="Authorization\Throttler.cs" />
     <Compile Include="Authorization\TransientGrantingPermissionService.cs" />
+    <Compile Include="CompatibilityExtensions\Net45Extensions.cs" />
     <Compile Include="ComponentModel\Columns\Filtering\BasicFilteringTypes.cs" />
     <Compile Include="ComponentModel\Columns\Filtering\FilteringIdFieldAttribute.cs" />
     <Compile Include="ComponentModel\Columns\Filtering\QuickFilterOptionAttribute.cs" />
@@ -185,7 +186,6 @@
     <Compile Include="Localization\ILocalTextContext.cs" />
     <Compile Include="Localization\ILocalTextRegistry.cs" />
     <Compile Include="Helpers\Invariants.cs" />
-    <Compile Include="Interface\ISupportAttached.cs" />
     <Compile Include="Localization\LocalText.cs" />
     <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Localization\LocalTextRegistry.cs" />
@@ -207,7 +207,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.Serenity.Core.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

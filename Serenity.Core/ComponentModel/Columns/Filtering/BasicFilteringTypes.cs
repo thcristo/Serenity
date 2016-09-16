@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reflection;
 
 namespace Serenity.ComponentModel
 {
@@ -133,11 +134,11 @@ namespace Serenity.ComponentModel
         public LookupFilteringAttribute(Type lookupType)
             : base("Lookup")
         {
-            var attr = lookupType.GetCustomAttributes(typeof(LookupScriptAttribute), false);
-            if (attr.Length == 0)
+            var attr = lookupType.GetCustomAttribute<LookupScriptAttribute>(false);
+            if (attr == null)
                 throw new ArgumentOutOfRangeException("lookupType");
 
-            SetOption("lookupKey", ((LookupScriptAttribute)attr[0]).Key);
+            SetOption("lookupKey", attr.Key);
         }
 
         public String IdField

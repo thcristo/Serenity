@@ -28,3 +28,4 @@ Serenity.CodeGenerator/App.config
 *.crunchsolution.cache
 *.ncrunchproject
 *.ncrunchsolution
+Serenity.Core/project.lock.json
