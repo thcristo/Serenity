@@ -84,6 +84,33 @@ interface Select2Options {
     loadMorePadding?: number;
     nextSearchTerm?: (p1: any, p2: string) => string;
 }
+declare namespace ss {
+    interface AssemblyReg {
+        name: string;
+        __types: ClassReg[];
+    }
+    interface ClassReg {
+        __register: boolean;
+        __class: boolean;
+        __assembly: AssemblyReg;
+        __interfaces: any[];
+    }
+    let __assemblies: {
+        [name: string]: AssemblyReg;
+    };
+    class Exception {
+        constructor(msg: string);
+    }
+    class NotSupportedException extends Exception {
+        constructor(msg: string);
+    }
+}
+declare namespace System.ComponentModel {
+    class DisplayNameAttribute {
+        constructor(displayName: string);
+        displayName: string;
+    }
+}
 interface Toastr {
     getContainer(options?: ToastrOptions, create?: boolean): JQuery;
 }
@@ -177,33 +204,6 @@ declare namespace Q {
         [key: string]: TItem[];
     };
 }
-declare namespace ss {
-    interface AssemblyReg {
-        name: string;
-        __types: ClassReg[];
-    }
-    interface ClassReg {
-        __register: boolean;
-        __class: boolean;
-        __assembly: AssemblyReg;
-        __interfaces: any[];
-    }
-    let __assemblies: {
-        [name: string]: AssemblyReg;
-    };
-    class Exception {
-        constructor(msg: string);
-    }
-    class NotSupportedException extends Exception {
-        constructor(msg: string);
-    }
-}
-declare namespace System.ComponentModel {
-    class DisplayNameAttribute {
-        constructor(displayName: string);
-        displayName: string;
-    }
-}
 declare namespace Q {
     function coalesce(a: any, b: any): any;
     function isValue(a: any): boolean;
@@ -284,7 +284,7 @@ declare namespace Q {
     function toId(id: any): any;
 }
 declare namespace Q {
-    function formatDate(date: Date, format?: string): string;
+    function formatDate(d: Date | string, format?: string): string;
     function formatDayHourAndMin(n: number): string;
     function formatISODateTimeUTC(d: Date): string;
     function parseISODateTime(s: string): Date;
@@ -1109,7 +1109,7 @@ declare namespace Serenity {
 }
 declare namespace Serenity {
     class DateTimeEditor extends Widget<DateTimeEditorOptions> {
-        constructor(input: JQuery, opt: DateTimeEditorOptions);
+        constructor(input: JQuery, opt?: DateTimeEditorOptions);
         static roundToMinutes(date: Date, minutesStep: number): Date;
         value: string;
         valueAsDate: Date;
@@ -1183,6 +1183,7 @@ declare namespace Serenity {
         lookupKey?: string;
         minimumResultsForSearch?: any;
         inplaceAdd?: boolean;
+        inplaceAddPermission?: string;
         dialogType?: string;
         cascadeFrom?: string;
         cascadeField?: string;
@@ -1877,6 +1878,7 @@ declare namespace Serenity {
         value: string;
         values: string[];
         get_text(): string;
+        readOnly: boolean;
     }
     namespace Select2Extensions {
         function select2(element: JQuery): JQuery;

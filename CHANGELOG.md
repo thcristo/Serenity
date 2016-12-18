@@ -1,3 +1,57 @@
+## 2.6.10 (2016-12-12)
+
+Bugfixes:
+  - fix date required even if not
+  
+## 2.6.9 (2016-12-12)
+
+Bugfixes:
+  - fix code generator views
+
+## 2.6.8 (2016-12-11)
+
+Features:
+  - when no category is specified for any of items, don't show default category name, even if useCategories is true, but create category div for CSS compability
+  - added inplaceaddpermission to lookup editor
+  - disable inplace add functionality if select2 editor is readonly
+  - call dialog arrange method on resize and active tab change
+  - add "d": date only, "g": dd/MM/yyyy HH:mm (culture specific dmy order), "G": dd/MM/yyyy HH:mm:ss (culture specific dmy order), "s": yyyy-MM-ddTHH:mm:ss, "u": yyyy-MM-ddTHH:mm:ss.fffZ format specifiers for Q.formatDate function
+  - Q.formatDate can now accept an iso date/time string or normal date string in addition to a Date object
+  - Q.parseDate can also parse iso date/time values
+  - feature selection wizard while creating a new application with Serene template. you can now optionally exclude Northwind, Meeting, Organization, Samples etc. [Serene]
+  - added attendee editor to meeting UI [Serene]
+
+## 2.6.7 (2016-12-09)
+
+Bugfixes:
+  - fix datetimeoffset conversion bug affecting json deserialization
+
+## 2.6.6 (2016-12-09)
+
+Bugfixes:
+  - fix typescript services transform error when node is null somehow
+  - update typescript services used for t4 transforms to 2.0.6
+  - possible problem with asyncPostProcessCleanup when a column is removed
+
+## 2.6.5 (2016-12-08)
+
+Features:
+  - code generator single & multiple tabs merged into a new datagrid based interface
+  - added DateTimeOffset field type 
+  - added ByteArray field type for small binary column types like timestamp, varbinary(8) etc.
+  - add minbuffer (number of buffered rows on top and bottom), and renderAllCells (render all cells in row, including non visible ones, helps with inline editing tab order) options to slick.grid
+  - give a more informational error message about "query affected N rows while 1 expected"
+  - added IReadOnly class to TypeScript defs
+  - add optional AdminLTE style for login and signup pages (thanks @DucThanhNguyen) [Serene]
+  - default timeout of 90 secs for running migrations [Serene]
+  - sample for dynamic navigation items (thanks @DucThanhNguyen) [Serene]
+  
+Bugfixes:
+  - delete button in multiple image upload editor gets lost for long file names
+  - fix android keyboard hiding when search on menu is clicked
+  - oracle sequences should now work (Oracle users, please report)
+  - datetimeeditor fails on empty string
+
 ## 2.6.4 (2016-11-26)
 
 Features:

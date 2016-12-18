@@ -41,9 +41,9 @@ WriteLiteral("\r\n");
             return x + y;
     };
 
-    Func<EntityCodeField, string> gt = (x) =>
+    Func<EntityField, string> gt = (x) =>
     {
-        return (x.Type == "Stream" ? "byte[]" : (x.Type == "DateTime" ? "String" : (x.Type + (x.IsValueType ? "?" : ""))));
+        return (x.FieldType == "Stream" || x.FieldType == "ByteArray" ? "byte[]" : (x.FieldType == "DateTime" ? "String" : (x.FieldType + (x.IsValueType ? "?" : ""))));
     };
 
 
@@ -98,7 +98,7 @@ WriteLiteral("\r\n        [InlineConstant] public const string LocalTextPrefix =
 WriteLiteral("\";\r\n");
 
 
- foreach (var x in Model.Fields) {
+ foreach (EntityField x in Model.Fields) {
 
 WriteLiteral("\r\n        public ");
 
@@ -116,7 +116,7 @@ WriteLiteral(" { get; set; }");
                                                    }
 
 
- foreach (var x in Model.Joins){foreach (var y in x.Fields){
+ foreach (EntityJoin x in Model.Joins){foreach (EntityField y in x.Fields){
 
 WriteLiteral("\r\n        public ");
 
@@ -137,7 +137,7 @@ WriteLiteral(" { get; set; }");
 WriteLiteral("\r\n\r\n        [Imported, PreserveMemberCase]\r\n        public static class Fields\r\n " +
 "       {");
 
-          foreach (var x in Model.Fields) {
+          foreach (EntityField x in Model.Fields) {
 
 WriteLiteral("\r\n            [InlineConstant] public const string ");
 
@@ -155,7 +155,7 @@ WriteLiteral("\";");
                                                                                 }
 
 
- foreach (var x in Model.Joins){foreach (var y in x.Fields){
+ foreach (EntityJoin x in Model.Joins){foreach (EntityField y in x.Fields){
 
 WriteLiteral("\r\n            [InlineConstant] public const string ");
 

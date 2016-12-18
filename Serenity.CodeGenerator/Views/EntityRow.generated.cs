@@ -23,8 +23,6 @@ namespace Serenity.CodeGenerator.Views
  public dynamic Model { get; set; } 
         public override void Execute()
         {
-WriteLiteral("\r\n");
-
 
 
 WriteLiteral("\r\n");
@@ -110,7 +108,7 @@ WriteLiteral(", IIdRow");
 
                                                                                                                                                                 WriteLiteral("\r\n    {");
 
-      foreach (var x in Model.Fields) {
+      foreach (EntityField x in Model.Fields) {
     var attrs = new List<string>();
     attrs.Add("DisplayName(\"" + x.Title + "\")");
 
@@ -157,15 +155,15 @@ WriteLiteral("]\r\n");
 WriteLiteral("        public ");
 
 
-                  Write(x.Type);
+                  Write(x.DataType);
 
 
-                          Write(x.IsValueType ? "?" : "");
+                              Write(x.IsValueType ? "?" : "");
 
 WriteLiteral(" ");
 
 
-                                                     Write(x.Ident);
+                                                         Write(x.Ident);
 
 WriteLiteral("\r\n        {\r\n            get { return Fields.");
 
@@ -183,7 +181,7 @@ WriteLiteral("[this] = value; }\r\n        }\r\n");
        }
 
 
- foreach (var x in Model.Joins){foreach (var y in x.Fields){
+ foreach (EntityJoin x in Model.Joins){foreach (EntityField y in x.Fields){
 
 WriteLiteral("\r\n        [DisplayName(\"");
 
@@ -198,15 +196,15 @@ WriteLiteral("\"), Expression(\"");
 WriteLiteral("\")]\r\n        public ");
 
 
-          Write(y.Type);
+          Write(y.DataType);
 
 
-                  Write(y.IsValueType ? "?" : "");
+                      Write(y.IsValueType ? "?" : "");
 
 WriteLiteral(" ");
 
 
-                                              Write(jf(x.Name, y.Ident));
+                                                  Write(jf(x.Name, y.Ident));
 
 WriteLiteral("\r\n        {\r\n            get { return Fields.");
 
@@ -259,44 +257,44 @@ WriteLiteral("()\r\n            : base(Fields)\r\n        {\r\n        }\r\n\r\n
 
                                                          WriteLiteral("\r\n        {");
 
-          foreach (var x in Model.Fields) {
+          foreach (EntityField x in Model.Fields) {
 
 WriteLiteral("\r\n            public ");
 
 
-               Write(x.Type);
+               Write(x.FieldType);
 
 WriteLiteral("Field ");
 
 
-                              Write(x.Ident);
+                                   Write(x.Ident);
 
 WriteLiteral(";");
 
 
-                                                    }
+                                                         }
 
 
- foreach (var x in Model.Joins) {
+ foreach (EntityJoin x in Model.Joins) {
 WriteLiteral("\r\n");
 
 
-       foreach (var y in x.Fields) {
+       foreach (EntityField y in x.Fields) {
 
 WriteLiteral("\r\n            public ");
 
 
-               Write(y.Type);
+               Write(y.FieldType);
 
 WriteLiteral("Field ");
 
 
-                              Write(jf(x.Name, y.Ident));
+                                   Write(jf(x.Name, y.Ident));
 
 WriteLiteral(";");
 
 
-                                                                }}
+                                                                     }}
 
 WriteLiteral("\r\n\r\n            public RowFields()\r\n                : base(\"");
 
@@ -316,7 +314,7 @@ WriteLiteral(")\r\n            {\r\n                LocalTextPrefix = \"");
 
                                            Write(Model.ClassName);
 
-WriteLiteral("\";\r\n            }\r\n        }\r\n    }\r\n}");
+WriteLiteral("\";\r\n            }\r\n        }\r\n    }\r\n}\r\n");
 
 
         }

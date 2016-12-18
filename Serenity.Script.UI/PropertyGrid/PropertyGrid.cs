@@ -1,6 +1,7 @@
 ﻿using jQueryApi;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Serenity
 {
@@ -32,40 +33,53 @@ namespace Serenity
 
             var categoriesDiv = div;
 
+            var useCategories = options.UseCategories &&
+                items.Any(x => !string.IsNullOrEmpty(x.Category));
+
             if (options.UseCategories)
             {
                 var linkContainer = J("<div/>")
                     .AddClass("category-links");
 
                 categoryIndexes = CreateCategoryLinks(linkContainer, items);
-                
+
                 if (categoryIndexes.Count > 1)
                     linkContainer.AppendTo(div);
                 else
                     linkContainer.Find("a.category-link").Unbind("click", CategoryLinkClick).Remove();
-
-                categoriesDiv = J("<div/>")
-                    .AddClass("categories")
-                    .AppendTo(div);
             }
-            
-            var fieldContainer = categoriesDiv;
+
+            categoriesDiv = J("<div/>")
+                .AddClass("categories")
+                .AppendTo(div);
+
+            jQueryObject fieldContainer;
+            if (useCategories)
+            {
+                fieldContainer = categoriesDiv;
+            }
+            else
+            { 
+                fieldContainer = J("<div/>")
+                    .AddClass("category")
+                    .AppendTo(categoriesDiv);
+            }
 
             string priorCategory = null;
 
             for (int i = 0; i < items.Count; i++)
             {
                 var item = items[i];
-                if (options.UseCategories &&
-                    priorCategory != item.Category)
+                var category = (item.Category ?? options.DefaultCategory ?? "");
+                if (useCategories && priorCategory != category)
                 {
-                    var categoryDiv = CreateCategoryDiv(categoriesDiv, categoryIndexes, item.Category, 
+                    var categoryDiv = CreateCategoryDiv(categoriesDiv, categoryIndexes, category, 
                         item.Collapsible != true ? (bool?)null : item.Collapsed ?? false);
 
                     if (priorCategory == null)
                         categoryDiv.AddClass("first-category");
 
-                    priorCategory = item.Category;
+                    priorCategory = category;
                     fieldContainer = categoryDiv;
                 }
 
@@ -260,8 +274,9 @@ namespace Serenity
 
             foreach (var x in items)
             {
-                if (result[x.Category] == null)
-                    result[x.Category] = order++;
+                var category = x.Category ?? options.DefaultCategory ?? "";
+                if (result[category] == null)
+                    result[category] = order++;
             }
 
             return result;
@@ -271,9 +286,10 @@ namespace Serenity
         {
             int idx = 0;
             var itemIndex = new JsDictionary<string, int>();
+            var itemCategory = new JsDictionary<string, string>();
             foreach (var x in items)
             {
-                x.Category = x.Category ?? options.DefaultCategory ?? "";
+                itemCategory[x.Name] = x.Category ?? options.DefaultCategory ?? "";
                 itemIndex[x.Name] = idx++;
             }
 
@@ -283,11 +299,13 @@ namespace Serenity
             items.Sort((x, y) => 
             {
                 var c = 0;
-                
-                if (x.Category != y.Category)
+
+                var xcategory = itemCategory[x.Name];
+                var ycategory = itemCategory[y.Name];
+                if (xcategory != ycategory)
                 {
-                    var c1 = categoryOrder[x.Category];
-                    var c2 = categoryOrder[y.Category];
+                    var c1 = categoryOrder[xcategory];
+                    var c2 = categoryOrder[ycategory];
                     if (c1 != null && c2 != null)
                         c = c1.Value - c2.Value;
                     else if (c1 != null)
@@ -297,7 +315,7 @@ namespace Serenity
                 }
 
                 if (c == 0)
-                    c = String.Compare(x.Category, y.Category);
+                    c = String.Compare(xcategory, ycategory);
 
                 if (c == 0)
                     c = itemIndex[x.Name].CompareTo(itemIndex[y.Name]);
@@ -310,11 +328,12 @@ namespace Serenity
             for (int i = 0; i < items.Count; i++)
             {
                 var item = items[i];
+                var category = itemCategory[item.Name];
 
-                if (!categoryIndexes.ContainsKey(item.Category))
+                if (!categoryIndexes.ContainsKey(category))
                 {
                     int index = categoryIndexes.Count + 1;
-                    categoryIndexes[item.Category] = index;
+                    categoryIndexes[category] = index;
 
                     if (index > 1)
                         J("<span/>")
@@ -324,7 +343,7 @@ namespace Serenity
                     
                     J("<a/>")
                         .AddClass("category-link")
-                        .Text(DetermineText(item.Category, prefix => prefix + "Categories." + item.Category))
+                        .Text(DetermineText(category, prefix => prefix + "Categories." + category))
                         .Attribute("tabindex", "-1")
                         .Attribute("href", "#" + options.IdPrefix + "Category" + index.ToString())
                         .Click(CategoryLinkClick)

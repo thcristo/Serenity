@@ -38,7 +38,7 @@ namespace Serenity
                 #pragma warning restore 618
             }
 
-            if (options.InplaceAdd)
+            if (options.InplaceAdd && (options.InplaceAddPermission == null || Q.Authorization.HasPermission(options.InplaceAddPermission)))
                 AddInplaceCreate(Q.Text("Controls.SelectEditor.InplaceAdd"));
         }
 
@@ -190,6 +190,9 @@ namespace Serenity
 
         protected override void InplaceCreateClick(jQueryEvent e)
         {
+            if (ReadOnly)
+                return;
+
             var self = this;
             CreateEditDialog(dialog =>
             {
@@ -284,7 +287,7 @@ namespace Serenity
             if (options.MinimumResultsForSearch != null)
                 opt.MinimumResultsForSearch = options.MinimumResultsForSearch.Value;
 
-            if (options.InplaceAdd)
+            if (options.InplaceAdd && (options.InplaceAddPermission == null || Q.Authorization.HasPermission(options.InplaceAddPermission)))
                 opt.CreateSearchChoice = GetCreateSearchChoice();
 
             if (options.Multiple)

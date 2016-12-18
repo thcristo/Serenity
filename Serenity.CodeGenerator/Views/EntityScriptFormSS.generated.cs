@@ -33,20 +33,20 @@ WriteLiteral("\r\n");
     var dotModule = Model.Module == null ? "" : ("." + Model.Module);
     var moduleDot = Model.Module == null ? "" : (Model.Module + ".");
 
-    Func<EntityCodeField, string> gt = (f) => {
-        if (f.Type == "String") {
+    Func<EntityField, string> gt = (f) => {
+        if (f.FieldType == "String") {
             return "StringEditor";
         }
-        else if (f.Type == "Int32" || f.Type == "Int16" || f.Type == "Int64") {
+        else if (f.FieldType == "Int32" || f.FieldType == "Int16" || f.FieldType == "Int64") {
             return "IntegerEditor";
         }
-        else if (f.Type == "Single" || f.Type == "Double" || f.Type == "Decimal") {
+        else if (f.FieldType == "Single" || f.FieldType == "Double" || f.FieldType == "Decimal") {
             return "DecimalEditor";
         }
-        else if (f.Type == "DateTime") {
+        else if (f.FieldType == "DateTime") {
             return "DateEditor";
         }
-        else if (f.Type == "Boolean") {
+        else if (f.FieldType == "Boolean") {
             return "BooleanEditor";
         }
         else
@@ -86,7 +86,7 @@ WriteLiteral("\";\r\n\r\n        public ");
 WriteLiteral("Form(string idPrefix) : base(idPrefix) {}\r\n\r\n");
 
 
- foreach (var x in Model.Fields)
+ foreach (EntityField x in Model.Fields)
     {
         if (x.Ident != Model.Identity)
         {

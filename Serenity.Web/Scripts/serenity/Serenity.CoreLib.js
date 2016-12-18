@@ -501,12 +501,35 @@ var Q;
 /// <reference path="Q.Number.ts" />
 var Q;
 (function (Q) {
-    function formatDate(date, format) {
-        if (!date) {
+    function formatDate(d, format) {
+        if (!d) {
             return '';
         }
-        if (format == null) {
+        var date;
+        if (typeof d == "string") {
+            var res = Q.parseDate(d);
+            if (!res)
+                return d;
+            date = res;
+        }
+        else
+            date = d;
+        if (format == null || format == "d") {
             format = Q.Culture.dateFormat;
+        }
+        else {
+            switch (format) {
+                case "g":
+                    format = Q.Culture.dateTimeFormat.replace(":ss", "");
+                    break;
+                case "G":
+                    format = Q.Culture.dateTimeFormat;
+                    break;
+                case "s":
+                    format = "yyyy-MM-ddTHH:mm:ss";
+                    break;
+                case "u": return Q.formatISODateTimeUTC(date);
+            }
         }
         var pad = function (i) {
             return Q.zeroPad(i, 2);
@@ -673,6 +696,13 @@ var Q;
     function parseDate(s, dateOrder) {
         if (!s || !s.length)
             return null;
+        if (s.length >= 10 && s.charAt(4) === '-' && s.charAt(7) === '-' &&
+            (s.length === 10 || (s.length > 10 && s.charAt(10) === 'T'))) {
+            var res = Q.parseISODateTime(s);
+            if (res == null)
+                return false;
+            return res;
+        }
         var dateVal;
         var dArray;
         var d, m, y;
@@ -805,7 +835,7 @@ var Q;
                 if (value instanceof LT) {
                     var lt = value;
                     var key = prefix + member;
-                    LT.$table[key] = lt.$key;
+                    LT.$table[key] = lt.key;
                     type[member] = new LT(key);
                 }
             }
@@ -2803,6 +2833,7 @@ var Serenity;
         TemplatedDialog.prototype.initDialog = function () {
             var _this = this;
             this.element.dialog(this.getDialogOptions());
+            this.element.closest('.ui-dialog').on('resize', function (e) { return _this.arrange(); });
             var type = ss.getInstanceType(this);
             this.responsive = Q.Config.responsiveDialogs ||
                 ss.getAttributes(type, Serenity.ResponsiveAttribute, true).length > 0;
@@ -2944,11 +2975,13 @@ var Serenity;
             this.dialogTitle = value;
         };
         TemplatedDialog.prototype.initTabs = function () {
+            var _this = this;
             var tabsDiv = this.byId('Tabs');
             if (tabsDiv.length === 0) {
                 return;
             }
             this.tabs = tabsDiv.tabs({});
+            this.tabs.bind('tabsactivate', function () { return _this.arrange(); });
         };
         TemplatedDialog.prototype.handleResponsive = function () {
             var dlg = this.element.dialog();
@@ -4686,7 +4719,15 @@ var Q;
         oldShowLabel = p.showLabel;
         p.showLabel = validateShowLabel;
         $.validator.addMethod("dateQ", function (value, element) {
-            return this.optional(element) || Q.parseDate(value) != false;
+            var o = this.optional(element);
+            if (o)
+                return o;
+            var d = Q.parseDate(value);
+            if (!d)
+                return false;
+            var z = new Date(d);
+            z.setHours(0, 0, 0, 0);
+            return z.getTime() === d.getTime();
         });
         $.validator.addMethod("hourAndMin", function (value, element) {
             return this.optional(element) || !isNaN(Q.parseHourAndMin(value));
