@@ -117,6 +117,7 @@ namespace Serenity.Data
 
         public string QuoteIdentifier(string s)
         {
+            /*
             if (string.IsNullOrEmpty(s))
                 return s;
 
@@ -124,6 +125,8 @@ namespace Serenity.Data
                 return s;
 
             return '"' + s + '"';
+            */
+            return s;
         }
 
         public string QuoteUnicodeString(string s)

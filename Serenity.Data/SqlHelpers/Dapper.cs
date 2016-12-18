@@ -1982,7 +1982,7 @@ this IDbConnection cnn, string sql, Func<TFirst, TSecond, TThird, TFourth, TRetu
                         EmitInt32(il, 4000); // [string] [4000]
                         il.Emit(OpCodes.Br_S, lenDone);
                         il.MarkLabel(isLong);
-                        EmitInt32(il, -1); // [string] [-1]
+                        EmitInt32(il, int.MaxValue); // [string] [-1]
                         il.MarkLabel(lenDone);
                         il.Emit(OpCodes.Stloc_1); // [string] 
                     }

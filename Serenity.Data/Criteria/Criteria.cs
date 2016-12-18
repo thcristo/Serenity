@@ -136,7 +136,7 @@
         /// <param name="query">
         ///   Query nesnesi (genellikle sub query).</param>
         public Criteria(ISqlQuery query)
-            : this(query.ToString())
+            : this("(" + query.ToString() + ")")
         {
         }
 
