@@ -29,5 +29,7 @@
         bool UseTakeAtEnd { get; }
         bool UseRowNum { get; }
         char ParameterPrefix { get; }
+        bool UseSequence { get; }
+        string SelectSequenceExpression { get; }
     }
 }

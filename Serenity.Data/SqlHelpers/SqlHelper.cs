@@ -83,6 +83,32 @@
                 }
             }
 
+            if (dialect.UseSequence)
+            {
+                var selectSequenceSQL = string.Format(dialect.SelectSequenceExpression, $"{query.TableName}_GEN");
+                Int64? seqValue = null;
+
+                using (IDataReader reader = ExecuteReader(connection, selectSequenceSQL))
+                {
+                    if (reader.Read() && !reader.IsDBNull(0))
+                    {
+                        seqValue = Convert.ToInt64(reader.GetValue(0));
+                    }
+                }
+
+                if (seqValue.HasValue)
+                {
+                    query.Set(query.IdentityColumn(), seqValue.Value);
+
+                    using (var command = NewCommand(connection, query.ToString(), query.Params))
+                    {
+                        ExecuteNonQuery(command);
+                    }
+                }
+
+                return seqValue;
+            }
+
             throw new NotImplementedException();
         }
 

@@ -185,5 +185,13 @@
 
             return sb.ToString();
         }
+
+        public string TableName
+        {
+            get
+            {
+                return this.tableName;
+            }
+        }
     }
 }

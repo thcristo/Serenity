@@ -216,5 +216,20 @@ namespace Serenity.Data
 
         public char ParameterPrefix { get { return '@'; } }
 
+        public bool UseSequence
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public string SelectSequenceExpression
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

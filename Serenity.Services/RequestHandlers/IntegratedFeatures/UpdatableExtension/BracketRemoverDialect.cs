@@ -213,5 +213,21 @@ namespace Serenity.Services
         {
             throw new NotImplementedException();
         }
+
+        public bool UseSequence
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public string SelectSequenceExpression
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

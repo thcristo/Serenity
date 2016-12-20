@@ -222,6 +222,20 @@ namespace Serenity.Data
             }
         }
 
+        public bool UseSequence
+        {
+            get
+            {
+                return false;
+            }
+        }
 
+        public string SelectSequenceExpression
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

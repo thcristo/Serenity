@@ -181,7 +181,7 @@ namespace Serenity.Data
         {
             get
             {
-                return true;
+                return false;
             }
         }
 
@@ -218,6 +218,22 @@ namespace Serenity.Data
         }
 
         public char ParameterPrefix { get { return '@'; } }
+
+        public bool UseSequence
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public string SelectSequenceExpression
+        {
+            get
+            {
+                return "SELECT GEN_ID({0},1) FROM RDB$DATABASE";
+            }
+        }
 
     }
 }

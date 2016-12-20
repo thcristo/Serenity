@@ -250,5 +250,21 @@ namespace Serenity.Data
                 return ':';
             }
         }
+
+        public bool UseSequence
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public string SelectSequenceExpression
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }
