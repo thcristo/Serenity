@@ -236,9 +236,18 @@ namespace Serenity.Data
                 // alana bir alias atanmışsa bunu yaz
                 if (!string.IsNullOrEmpty(s.ColumnName))
                 {
-                    sb.Append(SqlKeywords.As);
+                    if (this.parent == null || dialect.CanUseFieldAliasInSubquery)
+                    {
+                        sb.Append(SqlKeywords.As);
+                    }
+
                     var quoted = dialect.QuoteColumnAlias(s.ColumnName);
-                    sb.Append(quoted);
+
+                    if (this.parent == null || dialect.CanUseFieldAliasInSubquery)
+                    {
+                        sb.Append(quoted);
+                    }
+
                     if (distinct)
                     {
                         selCount.Append(SqlKeywords.As);

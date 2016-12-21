@@ -31,5 +31,6 @@
         char ParameterPrefix { get; }
         bool UseSequence { get; }
         string SelectSequenceExpression { get; }
+        bool CanUseFieldAliasInSubquery { get; }
     }
 }

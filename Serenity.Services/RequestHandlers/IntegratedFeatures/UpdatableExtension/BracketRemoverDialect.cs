@@ -229,5 +229,13 @@ namespace Serenity.Services
                 throw new NotImplementedException();
             }
         }
+
+        public bool CanUseFieldAliasInSubquery
+        {
+            get
+            {
+                return true;
+            }
+        }
     }
 }

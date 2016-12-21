@@ -235,5 +235,13 @@ namespace Serenity.Data
             }
         }
 
+        public bool CanUseFieldAliasInSubquery
+        {
+            get
+            {
+                return false;
+            }
+        }
+
     }
 }
