@@ -472,7 +472,6 @@ declare namespace Serenity {
     type ServiceOptions<TResponse extends Serenity.ServiceResponse> = Q.ServiceOptions<TResponse>;
 }
 declare namespace Q {
-    function addFullHeightResizeHandler(handler: (n: number) => void): void;
     function autoFullHeight(element: JQuery): void;
     function initFullHeightGridPage(gridDiv: JQuery): void;
     function layoutFillHeightValue(element: JQuery): number;
@@ -1729,6 +1728,7 @@ declare namespace Serenity {
         editorParams?: any;
         category?: string;
         cssClass?: string;
+        headerCssClass?: string;
         maxLength?: number;
         required?: boolean;
         insertable?: boolean;
