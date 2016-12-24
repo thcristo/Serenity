@@ -22,10 +22,11 @@
         }
 
         /// <summary>
+        /// <param name="dialect"></param>
         ///   Creates a new SqlDelete query.</summary>
         /// <param name="tableName">
         ///   Table to delete records from (required).</param>
-        public SqlDelete(string tableName)
+        public SqlDelete(ISqlDialect dialect, string tableName) : base(dialect)
         {
             Initialize(tableName);
         }
@@ -102,7 +103,7 @@
                 throw new ArgumentNullException(tableName);
 
             StringBuilder sb = new StringBuilder("DELETE FROM ", 24 + where.Length);
-            sb.Append(SqlSyntax.AutoBracketValid(tableName));
+            sb.Append(tableName);
 
             if (!String.IsNullOrEmpty(where))
             {

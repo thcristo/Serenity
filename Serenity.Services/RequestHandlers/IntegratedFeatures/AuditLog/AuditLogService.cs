@@ -27,7 +27,7 @@ namespace Serenity.Services
                     request.Sort.Length == 0)
                     request.Sort = new SortBy[] { new SortBy(fld.DateField.Name, true) };
 
-                var query = new SqlQuery().From(row)
+                var query = new SqlQuery(connection.GetDialect()).From(row)
                     .Select(
                         (Field)fld.IdField,
                         fld.EntityTypeIdField,
@@ -278,7 +278,7 @@ namespace Serenity.Services
 
                 list.CopyTo(start, part, 0, len);
 
-                var query = new SqlQuery().Select(((Field)row.IdField).Name).Select(nameField.Name).From(theRow.Table);
+                var query = new SqlQuery(connection.GetDialect()).Select(((Field)row.IdField).Name).Select(nameField.Name).From(theRow.Table);
                 query.Where(new Criteria((Field)row.IdField).In(part));
 
                 using (var reader = SqlHelper.ExecuteReader(connection, query))

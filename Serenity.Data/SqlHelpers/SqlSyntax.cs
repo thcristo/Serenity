@@ -124,31 +124,6 @@ namespace Serenity.Data
             return false;
         }
 
-        public static string AutoBracket(string s)
-        {
-            if (!SqlSettings.AutoQuotedIdentifiers)
-                return s;
-
-            if (string.IsNullOrEmpty(s))
-                return s;
-
-            if (IsQuoted(s))
-                return s;
-
-            return '[' + s + ']';
-        }
-
-        public static string AutoBracketValid(string s)
-        {
-            if (!SqlSettings.AutoQuotedIdentifiers)
-                return s;
-
-            if (!IsValidIdentifier(s))
-                return s;
-
-            return '[' + s + ']';
-        }
-
         public static string Unquote(string s)
         {
             if (!IsQuoted(s))

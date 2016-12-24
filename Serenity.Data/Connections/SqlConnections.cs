@@ -73,7 +73,7 @@ namespace Serenity.Data
             var connection = factory.CreateConnection();
             connection.ConnectionString = connectionString;
 
-            var dialect = ConnectionStringInfo.GetDialectByProviderName(providerName) ?? SqlSettings.DefaultDialect;
+            var dialect = ConnectionStringInfo.GetDialectByProviderName(providerName);
 
             var profiler = Dependency.TryResolve<IConnectionProfiler>();
             if (profiler != null)
@@ -145,9 +145,9 @@ namespace Serenity.Data
         {
             var wrapped = connection as WrappedConnection;
             if (wrapped == null)
-                return SqlSettings.DefaultDialect;
+                return null;
 
-            return wrapped.Dialect ?? SqlSettings.DefaultDialect;
+            return wrapped.Dialect;
         }
     }
 }

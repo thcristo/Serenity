@@ -30,9 +30,10 @@
 
         /// <summary>
         ///   Creates a new SqlUpdate query.</summary>
+        /// <param name="dialect"></param>
         /// <param name="tableName">
         ///   Tablename (required).</param>
-        public SqlUpdate(string tableName)
+        public SqlUpdate(ISqlDialect dialect, string tableName) : base(dialect)
         {
             Initialize(tableName);
         }
@@ -235,7 +236,7 @@
         ///   A new clone.</returns>
         public SqlUpdate Clone()
         {
-            SqlUpdate clone = new SqlUpdate(_tableName);
+            SqlUpdate clone = new SqlUpdate(this.dialect, _tableName);
             clone._nameValuePairs.AddRange(this._nameValuePairs);
             clone._where.Append(this._where.ToString());
             if (this._params != null)
@@ -281,13 +282,13 @@
 
             StringBuilder sb = new StringBuilder("UPDATE ", 64 + where.Length +
                 nameValuePairs.Count * 16);
-            sb.Append(SqlSyntax.AutoBracketValid(tableName));
+            sb.Append(tableName);
             sb.Append(" SET ");
             for (int i = 0; i < nameValuePairs.Count - 1; i += 2)
             {
                 if (i > 0)
                     sb.Append(", ");
-                sb.Append(SqlSyntax.AutoBracket(nameValuePairs[i]));
+                sb.Append(nameValuePairs[i]);
                 sb.Append(" = ");
                 sb.Append(nameValuePairs[i + 1]);
             }

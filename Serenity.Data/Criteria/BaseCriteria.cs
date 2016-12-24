@@ -577,7 +577,7 @@
 
             public ISqlDialect Dialect
             {
-                get { return SqlSettings.DefaultDialect; }
+                get { return this.Dialect; }
             }
         }
 
@@ -605,7 +605,7 @@
 
             public ISqlDialect Dialect
             {
-                get { return SqlSettings.DefaultDialect; }
+                get { return this.Dialect; }
             }
         }
     }

@@ -173,8 +173,7 @@
 
         protected virtual SqlQuery CreateQuery()
         {
-            var query = new SqlQuery()
-                .Dialect(Connection.GetDialect())
+            var query = new SqlQuery(Connection.GetDialect())
                 .From(Row);
 
             var idField = (Field)(((IIdRow)Row).IdField);

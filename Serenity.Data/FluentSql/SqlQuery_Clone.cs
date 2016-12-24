@@ -16,7 +16,7 @@
         /// </remarks>
         public SqlQuery Clone()
         {
-            var clone = new SqlQuery();
+            var clone = new SqlQuery(this.dialect);
 
             clone.dialect = dialect;
             clone.dialectOverridden = dialectOverridden;

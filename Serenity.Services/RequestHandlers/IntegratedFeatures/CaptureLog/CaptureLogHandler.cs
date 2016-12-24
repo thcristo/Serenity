@@ -143,7 +143,7 @@ namespace Serenity.Services
                 CopyCapturedFields(old, logRow);
             }
 
-            if (new SqlUpdate(info.logRowInstance.Table)
+            if (new SqlUpdate(uow.Connection.GetDialect(), info.logRowInstance.Table)
                     .Set(capture.ValidUntilField, now)
                     .WhereEqual(info.mappedIdField, info.mappedIdField.AsObject(logRow))
                     .WhereEqual(capture.ValidUntilField, CaptureLogConsts.UntilMax)

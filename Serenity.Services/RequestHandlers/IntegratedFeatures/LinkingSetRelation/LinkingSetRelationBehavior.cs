@@ -390,8 +390,7 @@ namespace Serenity.Services
             var row = rowFactory();
             var rowIdField = (Field)((row as IIdRow).IdField);
 
-            new SqlQuery()
-                    .Dialect(handler.Connection.GetDialect())
+            new SqlQuery(handler.Connection.GetDialect())
                     .From(row)
                     .Select(rowIdField)
                     .Select(itemKeyField)
@@ -424,8 +423,7 @@ namespace Serenity.Services
 
             var deleteHandler = deleteHandlerFactory();
             var deleteList = new List<object>();
-            new SqlQuery()
-                    .Dialect(handler.Connection.GetDialect())
+            new SqlQuery(handler.Connection.GetDialect())
                     .From(row)
                     .Select(rowIdField)
                     .Where(

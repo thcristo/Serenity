@@ -30,7 +30,6 @@ namespace Serenity.Data
 
             var text = DatabaseCaretReferences.Replace(sb.ToString());
 
-            dialect = dialect ?? SqlSettings.DefaultDialect;
             var openBracket = dialect.OpenQuote;
             if (openBracket != '[')
                 text = BracketLocator.ReplaceBrackets(text, dialect);

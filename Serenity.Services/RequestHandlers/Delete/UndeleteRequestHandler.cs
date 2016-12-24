@@ -115,8 +115,7 @@ namespace Serenity.Services
             var idField = (Field)Row.IdField;
             var id = idField.ConvertValue(Request.EntityId, CultureInfo.InvariantCulture);
 
-            var query = new SqlQuery()
-                .Dialect(Connection.GetDialect())
+            var query = new SqlQuery(Connection.GetDialect())
                 .From(Row)
                 .WhereEqual(idField, id);
 
@@ -187,7 +186,7 @@ namespace Serenity.Services
             {
                 OnBeforeUndelete();
 
-                var update = new SqlUpdate(Row.Table)
+                var update = new SqlUpdate(unitOfWork.Connection.GetDialect(), Row.Table)
                     .WhereEqual(idField, id);
 
                 if (isDeletedRow != null)

@@ -451,8 +451,7 @@
 
         protected virtual SqlQuery CreateQuery()
         {
-            return new SqlQuery()
-                .Dialect(Connection.GetDialect())
+            return new SqlQuery(Connection.GetDialect())
                 .From(Row);
         }
 

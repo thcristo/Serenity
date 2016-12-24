@@ -73,7 +73,7 @@ namespace Serenity.Services
 
                     if (idField.IndexCompare(Old, Row) != 0)
                     {
-                        var update = new SqlUpdate(Row.Table);
+                        var update = new SqlUpdate(Connection.GetDialect(), Row.Table);
                         update.Set(Row);
                         update.Where(idField == new ValueCriteria(idField.AsObject(Old)));
                         update.Execute(Connection, ExpectedRows.One);
@@ -238,8 +238,7 @@ namespace Serenity.Services
                 idField.ConvertValue(Request.EntityId, CultureInfo.InvariantCulture)
                 : idField.AsObject(Row);
 
-            var query = new SqlQuery()
-                .Dialect(Connection.GetDialect())
+            var query = new SqlQuery(Connection.GetDialect())
                 .From(Old)
                 .SelectTableFields()
                 .WhereEqual(idField, id);

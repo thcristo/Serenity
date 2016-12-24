@@ -116,7 +116,7 @@ namespace Serenity.Data
             var info = EnsureInfo();
 
             var row = info.localRowInstance.CreateNew();
-            if (new SqlQuery()
+            if (new SqlQuery(connection.GetDialect())
                     .From(row)
                     .Select((Field)info.localRowInterface.IdField)
                     .WhereEqual((Field)info.mappedIdField, recordId)
@@ -211,7 +211,7 @@ namespace Serenity.Data
             var info = EnsureInfo();
 
             var row = info.localRowInstance.CreateNew();
-            if (new SqlQuery()
+            if (new SqlQuery(connection.GetDialect())
                     .From(row)
                     .SelectTableFields()
                     .WhereEqual((Field)info.mappedIdField, recordId)
@@ -227,7 +227,7 @@ namespace Serenity.Data
             var info = EnsureInfo();
 
             var row = info.localRowInstance.CreateNew();
-            return new SqlQuery()
+            return new SqlQuery(connection.GetDialect())
                     .From(row)
                     .SelectTableFields()
                     .WhereEqual((Field)info.mappedIdField, recordId)

@@ -216,7 +216,7 @@ namespace Serenity.Services
             var copyResult = CopyTemporaryFiles(handler, new UploadedFile[0], newFileList, filesToDelete);
             var idField = (Field)(((IIdRow)handler.Row).IdField);
 
-            new SqlUpdate(handler.Row.Table)
+            new SqlUpdate(handler.UnitOfWork.Connection.GetDialect(), handler.Row.Table)
                 .Set(field, copyResult)
                 .Where(idField == new ValueCriteria(idField.AsObject(handler.Row)))
                 .Execute(handler.UnitOfWork.Connection);

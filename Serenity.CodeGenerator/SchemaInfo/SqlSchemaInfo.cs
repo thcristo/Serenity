@@ -98,7 +98,7 @@ order by 3";
             if (connection.GetDialect() is MySqlDialect ||
                 connection.GetDialect().GetType().Name.StartsWith("SqlServer"))
             {
-                var query = new SqlQuery().Select(
+                var query = new SqlQuery(connection.GetDialect()).Select(
                         "KCU.COLUMN_NAME")
                     .From(
                         inf + "TABLE_CONSTRAINTS AS TC INNER JOIN " +
@@ -172,7 +172,7 @@ order by 3";
 
             if (connection.GetDialect().GetType().Name.StartsWith("SqlServer"))
             {
-                new SqlQuery().Select(
+                new SqlQuery(connection.GetDialect()).Select(
                     "C.NAME")
                 .From(
                     "syscolumns C " +
@@ -393,7 +393,7 @@ order by 1, 5";
                 var fk = new Alias(inf + "CONSTRAINT_COLUMN_USAGE", "fk");
                 var pk = new Alias(inf + "KEY_COLUMN_USAGE", "pk");
 
-                var list = connection.Query<ForeignKeyInfo>(new SqlQuery()
+                var list = connection.Query<ForeignKeyInfo>(new SqlQuery(connection.GetDialect())
                     .From(c)
                     .From(fk)
                     .From(pk)

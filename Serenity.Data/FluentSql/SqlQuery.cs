@@ -26,7 +26,7 @@
         /// <summary>
         /// Creates a new SqlQuery instance.
         /// </summary>
-        public SqlQuery()
+        public SqlQuery(ISqlDialect dialect) : base(dialect)
         {
             columns = new List<Column>();
             from = new StringBuilder();
@@ -64,7 +64,7 @@
             if (from.Length > 0)
                 from.Append(", ");
 
-            from.Append(SqlSyntax.AutoBracketValid(table));
+            from.Append(table);
 
             return this;
         }
@@ -460,7 +460,7 @@
         /// A new query that shares parameters.</returns>
         public SqlQuery SubQuery()
         {
-            return this.CreateSubQuery<SqlQuery>();
+            return this.CreateSubQuery();
         }
 
         /// <summary>
@@ -562,8 +562,11 @@
             if (dialect == null)
                 throw new ArgumentNullException("dialect");
 
-            this.dialect = dialect;
-            this.dialectOverridden = true;
+            if (this.dialect != dialect)
+            {
+                this.dialect = dialect;
+                this.dialectOverridden = true;
+            }
 
             return this;
         }

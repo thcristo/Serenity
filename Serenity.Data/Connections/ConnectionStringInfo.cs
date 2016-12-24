@@ -85,7 +85,7 @@ namespace Serenity.Data
                     return (this.dialect = (ISqlDialect)Activator.CreateInstance(dialectType));
                 }
 
-                return (this.dialect = GetDialectByProviderName(ProviderName) ?? SqlSettings.DefaultDialect);
+                return (this.dialect = GetDialectByProviderName(ProviderName));
             }
             set
             {

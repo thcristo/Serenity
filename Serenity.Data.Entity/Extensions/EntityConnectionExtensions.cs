@@ -21,7 +21,7 @@ namespace Serenity.Data
             where TRow: Row, IIdRow, new()
         {
             var row = new TRow() { TrackWithChecks = true };
-            if (new SqlQuery().From(row)
+            if (new SqlQuery(connection.GetDialect()).From(row)
                     .SelectTableFields()
                     .Where(new Criteria((IField)row.IdField) == new ValueCriteria(id))
                     .GetSingle(connection))
@@ -44,7 +44,7 @@ namespace Serenity.Data
             where TRow: Row, IIdRow, new()
         {
             var row = new TRow() { TrackWithChecks = true };
-            var query = new SqlQuery().From(row)
+            var query = new SqlQuery(connection.GetDialect()).From(row)
                 .Where(new Criteria((IField)row.IdField) == new ValueCriteria(id));
 
             editQuery(query);
@@ -70,7 +70,7 @@ namespace Serenity.Data
             where TRow : Row, new()
         {
             var row = new TRow() { TrackWithChecks = true };
-            if (new SqlQuery().From(row)
+            if (new SqlQuery(connection.GetDialect()).From(row)
                     .SelectTableFields()
                     .Where(where)
                     .GetSingle(connection))
@@ -94,7 +94,7 @@ namespace Serenity.Data
             where TRow : Row, new()
         {
             var row = new TRow() { TrackWithChecks = true };
-            var query = new SqlQuery().From(row);
+            var query = new SqlQuery(connection.GetDialect()).From(row);
 
             editQuery(query);
 
@@ -119,7 +119,7 @@ namespace Serenity.Data
             where TRow : Row, new()
         {
             var row = new TRow() { TrackWithChecks = true };
-            if (new SqlQuery().From(row)
+            if (new SqlQuery(connection.GetDialect()).From(row)
                     .SelectTableFields()
                     .Where(where)
                     .GetFirst(connection))
@@ -143,7 +143,7 @@ namespace Serenity.Data
             where TRow : Row, new()
         {
             var row = new TRow() { TrackWithChecks = true };
-            var query = new SqlQuery().From(row);
+            var query = new SqlQuery(connection.GetDialect()).From(row);
 
             editQuery(query);
 
@@ -165,7 +165,7 @@ namespace Serenity.Data
             var row = new TRow() { TrackWithChecks = true };
 
             return Convert.ToInt32(SqlHelper.ExecuteScalar(connection,
-                new SqlQuery().From(row)
+                new SqlQuery(connection.GetDialect()).From(row)
                     .Select(Sql.Count())
                     .Where(where)));
         }
@@ -174,7 +174,7 @@ namespace Serenity.Data
             where TRow : Row, IIdRow, new()
         {
             var row = new TRow();
-            return new SqlQuery()
+            return new SqlQuery(connection.GetDialect())
                     .From(row)
                     .Select("1")
                     .Where(new Criteria((IField)row.IdField) == new ValueCriteria(id))
@@ -185,7 +185,7 @@ namespace Serenity.Data
             where TRow : Row, new()
         {
             var row = new TRow() { TrackWithChecks = true };
-            return new SqlQuery().From(row)
+            return new SqlQuery(connection.GetDialect()).From(row)
                     .Select("1")
                     .Where(where)
                     .Exists(connection);
@@ -201,7 +201,7 @@ namespace Serenity.Data
             where TRow : Row, new()
         {
             var row = new TRow() { TrackWithChecks = true };
-            return new SqlQuery().From(row)
+            return new SqlQuery(connection.GetDialect()).From(row)
                     .SelectTableFields()
                     .Where(where)
                     .List(connection, row);
@@ -211,7 +211,7 @@ namespace Serenity.Data
             where TRow : Row, new()
         {
             var row = new TRow() { TrackWithChecks = true };
-            var query = new SqlQuery().From(row);
+            var query = new SqlQuery(connection.GetDialect()).From(row);
 
             editQuery(query);
 
@@ -221,13 +221,13 @@ namespace Serenity.Data
         public static void Insert<TRow>(this IDbConnection connection, TRow row)
             where TRow: Row
         {
-            ToSqlInsert(row).Execute(connection);
+            ToSqlInsert(row, connection.GetDialect()).Execute(connection);
         }
 
         public static Int64? InsertAndGetID<TRow>(this IDbConnection connection, TRow row)
             where TRow : Row
         {
-            return ToSqlInsert(row).ExecuteAndGetID(connection);
+            return ToSqlInsert(row, connection.GetDialect()).ExecuteAndGetID(connection);
         }
 
         public static void UpdateById<TRow>(this IDbConnection connection, TRow row, ExpectedRows expectedRows = ExpectedRows.One)
@@ -239,7 +239,7 @@ namespace Serenity.Data
             if (idField.IsNull(r))
                 throw new InvalidOperationException("ID field of row has null value!");
 
-            row.ToSqlUpdateById()
+            row.ToSqlUpdateById(connection.GetDialect())
                 .Execute(connection, expectedRows);
         }
 
@@ -247,17 +247,17 @@ namespace Serenity.Data
             where TRow: Row, IIdRow, new()
         {
             var row = new TRow();
-            return new SqlDelete(row.Table)
+            return new SqlDelete(connection.GetDialect(), row.Table)
                 .Where((Field)row.IdField == new ValueCriteria(id))
                 .Execute(connection, expectedRows);
         }
 
-        public static SqlInsert ToSqlInsert(this Row row)
+        public static SqlInsert ToSqlInsert(this Row row, ISqlDialect dialect)
         {
             if (row == null)
                 throw new ArgumentNullException("row");
 
-            var insert = new SqlInsert(row.Table);
+            var insert = new SqlInsert(dialect, row.Table);
             
             insert.Set(row);
 
@@ -272,12 +272,12 @@ namespace Serenity.Data
         ///   Creates a new SqlUpdate query.</summary>
         /// <param name="row">
         ///   Row with field values to set in new record (must be in TrackAssignments mode).</param>
-        public static SqlUpdate ToSqlUpdateById(this IIdRow row)
+        public static SqlUpdate ToSqlUpdateById(this IIdRow row, ISqlDialect dialect)
         {
             if (row == null)
                 throw new ArgumentNullException("row");
 
-            var update = new SqlUpdate(row.Table);
+            var update = new SqlUpdate(dialect, row.Table);
 
             update.Set((Row)row, (Field)(row.IdField));
             var idField = (Field)row.IdField;

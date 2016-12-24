@@ -34,7 +34,7 @@ namespace Serenity.Data
                 throw new ArgumentNullException("orderField");
 
             using (IDataReader reader = SqlHelper.ExecuteReader(connection,
-                new SqlQuery().Select(
+                new SqlQuery(connection.GetDialect()).Select(
                     Sql.Max(orderField.Name))
                 .From(
                     tableName, Alias.T0)
@@ -113,7 +113,7 @@ namespace Serenity.Data
             OrderRecord changing = null;
 
             // query to fetch id and display order values of the records in the group
-            SqlQuery query = new SqlQuery()
+            SqlQuery query = new SqlQuery(connection.GetDialect())
                 .Select(
                     keyField,
                     orderField)

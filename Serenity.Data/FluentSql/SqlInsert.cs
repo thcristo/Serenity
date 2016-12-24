@@ -38,9 +38,10 @@
 
         /// <summary>
         ///   Creates a new SqlInsert query.</summary>
+        /// <param name="dialect"></param>
         /// <param name="tableName">
         ///   Table to insert record (required).</param>
-        public SqlInsert(string tableName)
+        public SqlInsert(ISqlDialect dialect, string tableName) : base(dialect)
         {
             Initialize(tableName);
         }
@@ -124,7 +125,7 @@
         /// <returns>Clone.</returns>
         public SqlInsert Clone()
         {
-            SqlInsert clone = new SqlInsert(tableName);
+            SqlInsert clone = new SqlInsert(this.dialect, tableName);
             clone.nameValuePairs.AddRange(this.nameValuePairs);
             CloneParams(clone);
             clone.cachedQuery = this.cachedQuery;
@@ -166,13 +167,13 @@
                 throw new ArgumentOutOfRangeException("nameValuePairs");
 
             StringBuilder sb = new StringBuilder("INSERT INTO ", 64 + nameValuePairs.Count * 16);
-            sb.Append(SqlSyntax.AutoBracketValid(tableName));
+            sb.Append(tableName);
             sb.Append(" (");
             for (int i = 0; i < nameValuePairs.Count; i += 2)
             {
                 if (i > 0)
                     sb.Append(", ");
-                sb.Append(SqlSyntax.AutoBracket(nameValuePairs[i]));
+                sb.Append(nameValuePairs[i]);
             }
             sb.Append(") VALUES (");
             for (int i = 1; i < nameValuePairs.Count; i += 2)

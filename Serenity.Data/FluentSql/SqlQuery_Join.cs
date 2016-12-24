@@ -10,7 +10,7 @@
         {
             sb.Append(join.GetKeyword());
             sb.Append(' ');
-            sb.Append(SqlSyntax.AutoBracketValid(join.Table));
+            sb.Append(join.Table);
 
             // joinAlias belirtilmişse ekle
             if (!string.IsNullOrEmpty(join.Name))

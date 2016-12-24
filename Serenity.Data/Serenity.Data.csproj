@@ -161,7 +161,6 @@
     <Compile Include="QueryModel\Parameter.cs" />
     <Compile Include="SqlHelpers\SqlHelper.cs" />
     <Compile Include="SqlHelpers\SqlSyntax.cs" />
-    <Compile Include="SqlHelpers\SqlSettings.cs" />
     <Compile Include="Utility\AppSettingsJsonConfigRepository.cs" />
     <Compile Include="Utility\DeltaLister.cs" />
     <Compile Include="Utility\SqlLogger.cs" />

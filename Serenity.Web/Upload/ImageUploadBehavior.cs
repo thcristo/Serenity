@@ -141,7 +141,7 @@ namespace Serenity.Services
                 var idField = (Field)(((IIdRow)handler.Row).IdField);
 
                 row = handler.Row.Clone();
-                var query = new SqlQuery()
+                var query = new SqlQuery(handler.Connection.GetDialect())
                     .From(row);
 
                 foreach (var field in replaceFields.Values)
@@ -314,7 +314,7 @@ namespace Serenity.Services
             var copyResult = CopyTemporaryFile(handler, filesToDelete);
             var idField = (Field)(((IIdRow)handler.Row).IdField);
 
-            new SqlUpdate(handler.Row.Table)
+            new SqlUpdate(handler.UnitOfWork.Connection.GetDialect(), handler.Row.Table)
                 .Set(filename, copyResult.DbFileName)
                 .Where(idField == new ValueCriteria(idField.AsObject(handler.Row)))
                 .Execute(handler.UnitOfWork.Connection);

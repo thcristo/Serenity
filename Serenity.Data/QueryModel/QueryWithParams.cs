@@ -13,9 +13,9 @@
         private Dictionary parameters;
         private int nextAutoParam;
 
-        public QueryWithParams()
+        public QueryWithParams(ISqlDialect dialect)
         {
-            dialect = SqlSettings.DefaultDialect;
+            this.dialect = dialect;
         }
 
         protected void CloneParams(QueryWithParams target)
@@ -95,10 +95,9 @@
         /// </summary>
         /// <returns>
         /// A new query that shares parameters.</returns>
-        public TQuery CreateSubQuery<TQuery>()
-            where TQuery: QueryWithParams, new()
+        public SqlQuery CreateSubQuery()
         {
-            var subQuery = new TQuery
+            var subQuery = new SqlQuery(this.dialect)
             {
                 parent = this
             };

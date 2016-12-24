@@ -35,7 +35,7 @@ namespace Serenity.Data
         protected Field(ICollection<Field> fields, FieldType type, string name, LocalText caption, int size, FieldFlags flags)
         {
             this.name = name;
-            expression = "T0." + SqlSyntax.AutoBracket(name);
+            expression = "T0." + name;
             this.size = size;
             this.flags = flags;
             this.type = type;

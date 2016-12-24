@@ -51,7 +51,7 @@
                 if (identityColumn == null)
                     throw new ArgumentNullException("query.IdentityColumn");
 
-                queryText += " RETURNING " + SqlSyntax.AutoBracket(identityColumn);
+                queryText += " RETURNING " + identityColumn;
 
                 if (dialect.UseReturningIntoVar)
                     queryText += " INTO " + dialect.ParameterPrefix + identityColumn;
@@ -386,7 +386,7 @@
                         param.DbType = mappedType;
 
                     if (param.DbType == DbType.DateTime &&
-                        (dialect ?? SqlSettings.DefaultDialect).UseDateTime2)
+                        dialect.UseDateTime2)
                         param.DbType = DbType.DateTime2;
                 }
 

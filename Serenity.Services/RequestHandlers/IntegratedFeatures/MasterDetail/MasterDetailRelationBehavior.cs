@@ -350,8 +350,7 @@ namespace Serenity.Services
                 // if we're not gonna compare old rows with new ones
                 // no need to call list request handler
 
-                new SqlQuery()
-                        .Dialect(handler.Connection.GetDialect())
+                new SqlQuery(handler.Connection.GetDialect())
                         .From(row)
                         .Select((Field)rowIdField)
                         .Where(
@@ -394,8 +393,7 @@ namespace Serenity.Services
 
             var deleteHandler = deleteHandlerFactory();
             var deleteList = new List<object>();
-            new SqlQuery()
-                    .Dialect(handler.Connection.GetDialect())
+            new SqlQuery(handler.Connection.GetDialect())
                     .From(row)
                     .Select((Field)rowIdField)
                     .Where(

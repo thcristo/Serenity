@@ -80,14 +80,14 @@ namespace Serenity.Web
             var list = new List<TRow>();
             var loader = new TRow();
 
-            var query = new SqlQuery()
-                .From(loader);
-
-            PrepareQuery(query);
-            ApplyOrder(query);
-
             using (var connection = SqlConnections.NewByKey(RowRegistry.GetConnectionKey(loader)))
             {
+                var query = new SqlQuery(connection.GetDialect())
+                .From(loader);
+
+                PrepareQuery(query);
+                ApplyOrder(query);
+
                 query.ForEach(connection, delegate()
                 {
                     list.Add(loader.Clone());
