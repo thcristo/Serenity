@@ -2,11 +2,11 @@
 
 namespace Serenity.Data
 {
-    public class MySqlDialect : ISqlDialect
+    public class MySqlDialect : SqlDialect
     {
         public static readonly ISqlDialect Instance = new MySqlDialect();
 
-        public virtual bool CanUseOffsetFetch
+        public override bool CanUseOffsetFetch
         {
             get
             {
@@ -14,7 +14,7 @@ namespace Serenity.Data
             }
         }
 
-        public virtual bool CanUseRowNumber
+        public override bool CanUseRowNumber
         {
             get
             {
@@ -22,7 +22,7 @@ namespace Serenity.Data
             }
         }
 
-        public bool CanUseSkipKeyword
+        public override bool CanUseSkipKeyword
         {
             get
             {
@@ -30,7 +30,7 @@ namespace Serenity.Data
             }
         }
 
-        public char CloseQuote
+        public override char CloseQuote
         {
             get
             {
@@ -38,7 +38,7 @@ namespace Serenity.Data
             }
         }
 
-        public string ConcatOperator
+        public override string ConcatOperator
         {
             get
             {
@@ -46,7 +46,7 @@ namespace Serenity.Data
             }
         }
 
-        public string DateFormat
+        public override string DateFormat
         {
             get
             {
@@ -54,7 +54,7 @@ namespace Serenity.Data
             }
         }
 
-        public string DateTimeFormat
+        public override string DateTimeFormat
         {
             get
             {
@@ -62,7 +62,7 @@ namespace Serenity.Data
             }
         }
 
-        public bool IsLikeCaseSensitive
+        public override bool IsLikeCaseSensitive
         {
             get
             {
@@ -70,7 +70,7 @@ namespace Serenity.Data
             }
         }
 
-        public bool MultipleResultsets
+        public override bool MultipleResultsets
         {
             get
             {
@@ -78,7 +78,7 @@ namespace Serenity.Data
             }
         }
 
-        public bool NeedsExecuteBlockStatement
+        public override bool NeedsExecuteBlockStatement
         {
             get
             {
@@ -86,7 +86,7 @@ namespace Serenity.Data
             }
         }
 
-        public virtual string OffsetFormat
+        public override string OffsetFormat
         {
             get
             {
@@ -94,7 +94,7 @@ namespace Serenity.Data
             }
         }
 
-        public virtual string OffsetFetchFormat
+        public override string OffsetFetchFormat
         {
             get
             {
@@ -102,7 +102,7 @@ namespace Serenity.Data
             }
         }
 
-        public char OpenQuote
+        public override char OpenQuote
         {
             get
             {
@@ -110,12 +110,12 @@ namespace Serenity.Data
             }
         }
 
-        public string QuoteColumnAlias(string s)
+        public override string QuoteColumnAlias(string s)
         {
             return QuoteIdentifier(s);
         }
 
-        public string QuoteIdentifier(string s)
+        public override string QuoteIdentifier(string s)
         {
             if (string.IsNullOrEmpty(s))
                 return s;
@@ -126,7 +126,7 @@ namespace Serenity.Data
             return '`' + s + '`';
         }
 
-        public string QuoteUnicodeString(string s)
+        public override string QuoteUnicodeString(string s)
         {
             if (s.IndexOf('\'') >= 0)
                 return "'" + s.Replace("'", "''") + "'";
@@ -134,7 +134,7 @@ namespace Serenity.Data
             return "'" + s + "'";
         }
 
-        public string ScopeIdentityExpression
+        public override string ScopeIdentityExpression
         {
             get
             {
@@ -142,7 +142,7 @@ namespace Serenity.Data
             }
         }
 
-        public string SkipKeyword
+        public override string SkipKeyword
         {
             get
             {
@@ -150,7 +150,7 @@ namespace Serenity.Data
             }
         }
 
-        public string TakeKeyword
+        public override string TakeKeyword
         {
             get
             {
@@ -158,7 +158,7 @@ namespace Serenity.Data
             }
         }
 
-        public string TimeFormat
+        public override string TimeFormat
         {
             get
             {
@@ -166,7 +166,7 @@ namespace Serenity.Data
             }
         }
 
-        public bool UseDateTime2
+        public override bool UseDateTime2
         {
             get
             {
@@ -174,7 +174,7 @@ namespace Serenity.Data
             }
         }
 
-        public bool UseReturningIdentity
+        public override bool UseReturningIdentity
         {
             get
             {
@@ -182,7 +182,7 @@ namespace Serenity.Data
             }
         }
 
-        public bool UseReturningIntoVar
+        public override bool UseReturningIntoVar
         {
             get
             {
@@ -190,7 +190,7 @@ namespace Serenity.Data
             }
         }
 
-        public bool UseScopeIdentity
+        public override bool UseScopeIdentity
         {
             get
             {
@@ -198,7 +198,7 @@ namespace Serenity.Data
             }
         }
 
-        public bool UseTakeAtEnd
+        public override bool UseTakeAtEnd
         {
             get
             {
@@ -206,7 +206,7 @@ namespace Serenity.Data
             }
         }
 
-        public bool UseRowNum
+        public override bool UseRowNum
         {
             get
             {
@@ -214,7 +214,7 @@ namespace Serenity.Data
             }
         }
 
-        public char ParameterPrefix
+        public override char ParameterPrefix
         {
             get
             {
@@ -222,7 +222,7 @@ namespace Serenity.Data
             }
         }
 
-        public bool UseSequence
+        public override bool UseSequence
         {
             get
             {
@@ -230,7 +230,7 @@ namespace Serenity.Data
             }
         }
 
-        public string SelectSequenceExpression
+        public override string SelectSequenceExpression
         {
             get
             {
@@ -238,7 +238,7 @@ namespace Serenity.Data
             }
         }
 
-        public bool CanUseFieldAliasInSubquery
+        public override bool CanUseFieldAliasInSubquery
         {
             get
             {

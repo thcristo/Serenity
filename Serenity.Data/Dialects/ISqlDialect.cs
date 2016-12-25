@@ -32,5 +32,6 @@
         bool UseSequence { get; }
         string SelectSequenceExpression { get; }
         bool CanUseFieldAliasInSubquery { get; }
+        SqlDataTypeInfo SqlTypeNameToDataType(string sqlTypeName, int size);
     }
 }

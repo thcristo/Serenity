@@ -130,7 +130,15 @@ order by 3";
 
             if (connection.GetDialect() is FirebirdDialect)
             {
-                return new List<string>();
+                //first column should always be of data type integer or bigint, primary key and auto generated
+                string pkDataType = (string)columns.Rows[0]["COLUMN_DATA_TYPE"];
+                if (pkDataType.Equals("integer", StringComparison.InvariantCultureIgnoreCase)
+                    || pkDataType.Equals("bigint", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    identityFields.Add((string)(columns.Rows[0]["COLUMN_NAME"]));
+                }
+
+                return identityFields;
             }
 
             if (connection.GetDialect() is PostgresDialect)
@@ -492,15 +500,15 @@ order by 1, 5";
                 fieldInfo.DataType = row[dataType] as string;
                 fieldInfo.Size = 0;
 
-                if (fieldInfo.DataType != SqlInt &&
-                    fieldInfo.DataType != SqlInteger &&
-                    fieldInfo.DataType != SqlReal &&
-                    fieldInfo.DataType != SqlFloat &&
-                    fieldInfo.DataType != SqlTinyInt &&
-                    fieldInfo.DataType != SqlSmallInt &&
-                    fieldInfo.DataType != SqlBigInt &&
-                    fieldInfo.DataType != SqlInt8 &&
-                    fieldInfo.DataType != SqlInt4)
+                if (fieldInfo.DataType != SqlDataTypes.SqlInt &&
+                    fieldInfo.DataType != SqlDataTypes.SqlInteger &&
+                    fieldInfo.DataType != SqlDataTypes.SqlReal &&
+                    fieldInfo.DataType != SqlDataTypes.SqlFloat &&
+                    fieldInfo.DataType != SqlDataTypes.SqlTinyInt &&
+                    fieldInfo.DataType != SqlDataTypes.SqlSmallInt &&
+                    fieldInfo.DataType != SqlDataTypes.SqlBigInt &&
+                    fieldInfo.DataType != SqlDataTypes.SqlInt8 &&
+                    fieldInfo.DataType != SqlDataTypes.SqlInt4)
                 {
                     var val = row[charMax];
                     var size = (val == null || val == DBNull.Value) ? (Int64?)null : Convert.ToInt64(val);
@@ -510,8 +518,7 @@ order by 1, 5";
                     val = row[numPrec];
                     var prec = (val == null || val == DBNull.Value) ? (Int64?)null : Convert.ToInt64(val);
 
-                    string dataType2;
-                    if (prec != null && (SqlTypeNameToFieldType(fieldInfo.DataType, fieldInfo.Size, out dataType2) != "String") &&
+                    if (prec != null && (connection.GetDialect().SqlTypeNameToDataType(fieldInfo.DataType, fieldInfo.Size).DataType != "String") &&
                         prec >= 0 && prec < 1000000000)
                     {
                         fieldInfo.Size = Convert.ToInt32(prec.Value);
@@ -569,85 +576,6 @@ order by 1, 5";
             public string PKSchema;
             public string PKTable;
             public string PKColumn;
-        }
-
-        const string SqlBit = "bit";
-        const string SqlDate = "date";
-        const string SqlDateTime = "datetime";
-        const string SqlDateTime2 = "datetime2";
-        const string SqlSmallDateTime = "smalldatetime";
-        const string SqlDateTimeOffset = "datetimeoffset";
-        const string SqlDecimal = "decimal";
-        const string SqlNumeric = "numeric";
-        const string SqlBigInt = "bigint";
-        const string SqlInt = "int";
-        const string SqlInteger = "integer";
-        const string SqlDouble = "double";
-        const string SqlDoublePrecision = "double precision";
-        const string SqlMoney = "money";
-        const string SqlNChar = "nchar";
-        const string SqlNVarChar = "nvarchar";
-        const string SqlNText = "ntext";
-        const string SqlText = "text";
-        const string SqlBlobSubType1 = "blob sub_type 1";
-        const string SqlReal = "real";
-        const string SqlFloat = "float";
-        const string SqlSmallInt = "smallint";
-        const string SqlVarChar = "varchar";
-        const string SqlChar = "char";
-        const string SqlUniqueIdentifier = "uniqueidentifier";
-        const string SqlVarBinary = "varbinary";
-        const string SqlTinyInt = "tinyint";
-        const string SqlTime = "time";
-        const string SqlTimestamp = "timestamp";
-        const string SqlRowVersion = "rowversion";
-        const string SqlInt8 = "int8";
-        const string SqlInt4 = "int4";
-
-        public static string SqlTypeNameToFieldType(string sqlTypeName, int size, out string dataType)
-        {
-            dataType = null;
-
-            if (sqlTypeName == SqlNVarChar || sqlTypeName == SqlNText || sqlTypeName == SqlText || sqlTypeName == SqlNChar ||
-                sqlTypeName == SqlVarChar || sqlTypeName == SqlChar || sqlTypeName == SqlBlobSubType1)
-                return "String";
-            else if (sqlTypeName == SqlInt || sqlTypeName == SqlInteger || sqlTypeName == SqlInt4)
-                return "Int32";
-            else if (sqlTypeName == SqlBigInt || sqlTypeName == SqlInt8)
-                return "Int64";
-            else if (sqlTypeName == SqlMoney || sqlTypeName == SqlDecimal || sqlTypeName == SqlNumeric)
-                return "Decimal";
-            else if (sqlTypeName == SqlDateTime || sqlTypeName == SqlDateTime2 || sqlTypeName == SqlDate || sqlTypeName == SqlSmallDateTime)
-                return "DateTime";
-            else if (sqlTypeName == SqlDateTimeOffset)
-                return "DateTimeOffset";
-            else if (sqlTypeName == SqlTime)
-                return "TimeSpan";
-            else if (sqlTypeName == SqlBit)
-                return "Boolean";
-            else if (sqlTypeName == SqlReal)
-                return "Single";
-            else if (sqlTypeName == SqlFloat || sqlTypeName == SqlDouble || sqlTypeName == SqlDoublePrecision)
-                return "Double";
-            else if (sqlTypeName == SqlSmallInt || sqlTypeName == SqlTinyInt)
-                return "Int16";
-            else if (sqlTypeName == SqlUniqueIdentifier)
-                return "Guid";
-            else if (sqlTypeName == SqlVarBinary)
-            {
-                if (size == 0 || size > 256)
-                    return "Stream";
-
-                dataType = "byte[]";
-                return "ByteArray";
-            }
-            else if (sqlTypeName == SqlTimestamp || sqlTypeName == SqlRowVersion)
-            {
-                dataType = "byte[]";
-                return "ByteArray";
-            }
-            else
-                return "Stream";
         }
     }
 }

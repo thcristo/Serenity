@@ -3,11 +3,11 @@ using System;
 
 namespace Serenity.Services
 {
-    internal class BracketRemoverDialect : ISqlDialect
+    internal class BracketRemoverDialect : SqlDialect
     {
         public static readonly BracketRemoverDialect Instance = new BracketRemoverDialect();
 
-        public bool CanUseOffsetFetch
+        public override bool CanUseOffsetFetch
         {
             get
             {
@@ -15,7 +15,7 @@ namespace Serenity.Services
             }
         }
 
-        public bool CanUseRowNumber
+        public override bool CanUseRowNumber
         {
             get
             {
@@ -23,7 +23,7 @@ namespace Serenity.Services
             }
         }
 
-        public bool CanUseSkipKeyword
+        public override bool CanUseSkipKeyword
         {
             get
             {
@@ -31,7 +31,7 @@ namespace Serenity.Services
             }
         }
 
-        public char CloseQuote
+        public override char CloseQuote
         {
             get
             {
@@ -39,7 +39,7 @@ namespace Serenity.Services
             }
         }
 
-        public string ConcatOperator
+        public override string ConcatOperator
         {
             get
             {
@@ -47,7 +47,7 @@ namespace Serenity.Services
             }
         }
 
-        public string DateFormat
+        public override string DateFormat
         {
             get
             {
@@ -55,7 +55,7 @@ namespace Serenity.Services
             }
         }
 
-        public string DateTimeFormat
+        public override string DateTimeFormat
         {
             get
             {
@@ -63,7 +63,7 @@ namespace Serenity.Services
             }
         }
 
-        public bool IsLikeCaseSensitive
+        public override bool IsLikeCaseSensitive
         {
             get
             {
@@ -71,7 +71,7 @@ namespace Serenity.Services
             }
         }
 
-        public bool MultipleResultsets
+        public override bool MultipleResultsets
         {
             get
             {
@@ -79,7 +79,7 @@ namespace Serenity.Services
             }
         }
 
-        public bool NeedsExecuteBlockStatement
+        public override bool NeedsExecuteBlockStatement
         {
             get
             {
@@ -87,7 +87,7 @@ namespace Serenity.Services
             }
         }
 
-        public string OffsetFetchFormat
+        public override string OffsetFetchFormat
         {
             get
             {
@@ -95,7 +95,7 @@ namespace Serenity.Services
             }
         }
 
-        public string OffsetFormat
+        public override string OffsetFormat
         {
             get
             {
@@ -103,7 +103,7 @@ namespace Serenity.Services
             }
         }
 
-        public char OpenQuote
+        public override char OpenQuote
         {
             get
             {
@@ -111,7 +111,7 @@ namespace Serenity.Services
             }
         }
 
-        public char ParameterPrefix
+        public override char ParameterPrefix
         {
             get
             {
@@ -119,7 +119,7 @@ namespace Serenity.Services
             }
         }
 
-        public string ScopeIdentityExpression
+        public override string ScopeIdentityExpression
         {
             get
             {
@@ -127,7 +127,7 @@ namespace Serenity.Services
             }
         }
 
-        public string SkipKeyword
+        public override string SkipKeyword
         {
             get
             {
@@ -135,7 +135,7 @@ namespace Serenity.Services
             }
         }
 
-        public string TakeKeyword
+        public override string TakeKeyword
         {
             get
             {
@@ -143,7 +143,7 @@ namespace Serenity.Services
             }
         }
 
-        public string TimeFormat
+        public override string TimeFormat
         {
             get
             {
@@ -151,7 +151,7 @@ namespace Serenity.Services
             }
         }
 
-        public bool UseDateTime2
+        public override bool UseDateTime2
         {
             get
             {
@@ -159,7 +159,7 @@ namespace Serenity.Services
             }
         }
 
-        public bool UseReturningIdentity
+        public override bool UseReturningIdentity
         {
             get
             {
@@ -167,7 +167,7 @@ namespace Serenity.Services
             }
         }
 
-        public bool UseReturningIntoVar
+        public override bool UseReturningIntoVar
         {
             get
             {
@@ -175,7 +175,7 @@ namespace Serenity.Services
             }
         }
 
-        public bool UseRowNum
+        public override bool UseRowNum
         {
             get
             {
@@ -183,7 +183,7 @@ namespace Serenity.Services
             }
         }
 
-        public bool UseScopeIdentity
+        public override bool UseScopeIdentity
         {
             get
             {
@@ -191,7 +191,7 @@ namespace Serenity.Services
             }
         }
 
-        public bool UseTakeAtEnd
+        public override bool UseTakeAtEnd
         {
             get
             {
@@ -199,22 +199,22 @@ namespace Serenity.Services
             }
         }
 
-        public string QuoteColumnAlias(string s)
+        public override string QuoteColumnAlias(string s)
         {
             return s;
         }
 
-        public string QuoteIdentifier(string s)
+        public override string QuoteIdentifier(string s)
         {
             return s;
         }
 
-        public string QuoteUnicodeString(string s)
+        public override string QuoteUnicodeString(string s)
         {
             throw new NotImplementedException();
         }
 
-        public bool UseSequence
+        public override bool UseSequence
         {
             get
             {
@@ -222,7 +222,7 @@ namespace Serenity.Services
             }
         }
 
-        public string SelectSequenceExpression
+        public override string SelectSequenceExpression
         {
             get
             {
@@ -230,7 +230,7 @@ namespace Serenity.Services
             }
         }
 
-        public bool CanUseFieldAliasInSubquery
+        public override bool CanUseFieldAliasInSubquery
         {
             get
             {

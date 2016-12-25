@@ -79,29 +79,29 @@ namespace Serenity.CodeGenerator
             return "any";
         }
 
-        private static EntityField ToEntityField(SqlSchemaInfo.FieldInfo fieldInfo, int prefixLength)
+        private static EntityField ToEntityField(ISqlDialect dialect, SqlSchemaInfo.FieldInfo fieldInfo, int prefixLength)
         {
+            var dataTypeInfo = dialect.SqlTypeNameToDataType(fieldInfo.DataType, fieldInfo.Size);
+            string specificDataType = dataTypeInfo.SpecificDataType ?? dataTypeInfo.DataType;
+
             string flags;
             if (fieldInfo.IsIdentity)
                 flags = "Identity";
             else if (fieldInfo.IsPrimaryKey)
                 flags = "PrimaryKey";
-            else if (fieldInfo.DataType == "timestamp" || fieldInfo.DataType == "rowversion")
+            else if (dataTypeInfo.IsNonUpdatable)
                 flags = "Insertable(false), Updatable(false), NotNull";
             else if (!fieldInfo.IsNullable)
                 flags = "NotNull";
             else
                 flags = null;
 
-            string dataType;
-            var fieldType = SqlSchemaInfo.SqlTypeNameToFieldType(fieldInfo.DataType, fieldInfo.Size, out dataType);
-            dataType = dataType ?? fieldType;
             return new EntityField
             {
-                FieldType = fieldType,
-                DataType = dataType,
-                IsValueType = fieldType != "String" && fieldType != "Stream" && fieldType != "ByteArray",
-                TSType = FieldTypeToTS(fieldType),
+                FieldType = dataTypeInfo.DataType,
+                DataType = specificDataType,
+                IsValueType = dataTypeInfo.DataType != "String" && dataTypeInfo.DataType != "Stream" && dataTypeInfo.DataType != "ByteArray",
+                TSType = FieldTypeToTS(dataTypeInfo.DataType),
                 Ident = GenerateVariableName(fieldInfo.FieldName.Substring(prefixLength)),
                 Title = Inflector.Inflector.Titleize(fieldInfo.FieldName.Substring(prefixLength)),
                 Flags = flags,
@@ -202,7 +202,7 @@ namespace Serenity.CodeGenerator
                 {
                     if (baseRowFieldset.Contains(f.FieldName.Substring(prefix)))
                     {
-                        var ef = ToEntityField(f, prefix);
+                        var ef = ToEntityField(connection.GetDialect(), f, prefix);
                         ef.Flags = null;
                         model.RowBaseFields.Add(ef);
                         return true;
@@ -219,7 +219,7 @@ namespace Serenity.CodeGenerator
 
             foreach (var field in fields)
             {
-                var f = ToEntityField(field, prefix);
+                var f = ToEntityField(connection.GetDialect(), field, prefix);
                 if (f.Name == className && f.FieldType == "String")
                     model.NameField = f.Name;
 
@@ -250,7 +250,7 @@ namespace Serenity.CodeGenerator
                         if (frg.FieldName.Equals(foreign.PKColumn, StringComparison.InvariantCultureIgnoreCase))
                             continue;
 
-                        var k = ToEntityField(frg, frgPrefix);
+                        var k = ToEntityField(connection.GetDialect(), frg, frgPrefix);
                         k.Flags = null;
                         k.Title = Inflector.Inflector.Titleize(JU(j.Name, frg.FieldName.Substring(frgPrefix)));
 
