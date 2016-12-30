@@ -1,5 +1,6 @@
 ﻿namespace Serenity.Data
 {
+    using Settings;
     using System;
     using System.Collections.Generic;
     using System.Text;
@@ -41,9 +42,10 @@
         /// <param name="dialect"></param>
         /// <param name="tableName">
         ///   Table to insert record (required).</param>
-        public SqlInsert(ISqlDialect dialect, string tableName) : base(dialect)
+        ///   <param name="moduleName"></param>
+        public SqlInsert(ISqlDialect dialect, string tableName, string moduleName) : base(dialect)
         {
-            Initialize(tableName);
+            Initialize(Config.Get<TablePrefixSettings>().PrefixTable(tableName, moduleName));
         }
 
         /// <summary>
@@ -125,7 +127,7 @@
         /// <returns>Clone.</returns>
         public SqlInsert Clone()
         {
-            SqlInsert clone = new SqlInsert(this.dialect, tableName);
+            SqlInsert clone = new SqlInsert(this.dialect, tableName, string.Empty);
             clone.nameValuePairs.AddRange(this.nameValuePairs);
             CloneParams(clone);
             clone.cachedQuery = this.cachedQuery;

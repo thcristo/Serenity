@@ -106,7 +106,7 @@ order by 3";
                         "ON KCU.CONSTRAINT_SCHEMA = TC.CONSTRAINT_SCHEMA AND " +
                         "KCU.CONSTRAINT_NAME = TC.CONSTRAINT_NAME AND " +
                         "KCU.TABLE_SCHEMA = TC.TABLE_SCHEMA AND " +
-                        "KCU.TABLE_NAME = TC.TABLE_NAME")
+                        "KCU.TABLE_NAME = TC.TABLE_NAME", string.Empty)
                     .Where(
                         new Criteria("TC.CONSTRAINT_TYPE") == "PRIMARY KEY" &
                         new Criteria("KCU.TABLE_NAME") == tableName)
@@ -185,7 +185,7 @@ order by 3";
                 .From(
                     "syscolumns C " +
                     "LEFT OUTER JOIN sysobjects T " +
-                    "ON (C.id = T.id)")
+                    "ON (C.id = T.id)", string.Empty)
                 .Where(
                     new Criteria("C.STATUS & 128") == 128 &
                     new Criteria("T.NAME") == tableName &

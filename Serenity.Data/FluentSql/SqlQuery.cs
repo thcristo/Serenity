@@ -1,5 +1,6 @@
 ﻿namespace Serenity.Data
 {
+    using Settings;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -55,8 +56,9 @@
         /// between table names (cross join)
         /// </summary>
         /// <param name="table">Table name</param>
+        /// <param name="moduleName"></param>
         /// <returns>The query itself.</returns>
-        public SqlQuery From(string table)
+        public SqlQuery From(string table, string moduleName)
         {
             if (string.IsNullOrEmpty(table))
                 throw new ArgumentNullException("table");
@@ -64,7 +66,7 @@
             if (from.Length > 0)
                 from.Append(", ");
 
-            from.Append(table);
+            from.Append(Config.Get<TablePrefixSettings>().PrefixTable(table, moduleName));
 
             return this;
         }
@@ -74,9 +76,10 @@
         /// When it is called more than once, puts a comma between table names (cross join)
         /// </summary>
         /// <param name="table">Table</param>
+        /// <param name="moduleName"></param>
         /// <param name="alias">Alias for the table</param>
         /// <returns>The query itself.</returns>
-        public SqlQuery From(string table, IAlias alias)
+        public SqlQuery From(string table, string moduleName, IAlias alias)
         {
             if (alias == null)
                 throw new ArgumentNullException("alias");
@@ -85,7 +88,7 @@
                 aliasExpressions.ContainsKey(alias.Name))
                 throw new ArgumentOutOfRangeException("{0} alias is used more than once in the query!");
 
-            From(table);
+            From(table, moduleName);
 
             from.Append(' ');
             from.Append(alias.Name);
@@ -113,7 +116,7 @@
             if (string.IsNullOrEmpty(alias.Table))
                 throw new ArgumentOutOfRangeException("alias.table");
 
-            return From(alias.Table, alias);
+            return From(alias.Table, string.Empty, alias);
         }
 
         /// <summary>
@@ -131,7 +134,7 @@
             if (alias == null)
                 throw new ArgumentNullException("alias");
 
-            return From(subQuery.ToString(), alias);
+            return From(subQuery.ToString(), string.Empty, alias);
         }
 
         /// <summary>

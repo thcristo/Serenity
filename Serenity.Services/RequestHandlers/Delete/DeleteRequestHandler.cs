@@ -103,7 +103,7 @@ namespace Serenity.Services
 
             if (isDeletedRow == null && deleteLogRow == null)
             {
-                if (new SqlDelete(Connection.GetDialect(), Row.Table)
+                if (new SqlDelete(Connection.GetDialect(), Row.Table, string.Empty)
                         .WhereEqual(idField, id)
                         .Execute(Connection) != 1)
                     throw DataValidation.EntityNotFoundError(Row, id);
@@ -114,7 +114,7 @@ namespace Serenity.Services
                 {
                     var updateLogRow = Row as IUpdateLogRow;
 
-                    var update = new SqlUpdate(Connection.GetDialect(), Row.Table)
+                    var update = new SqlUpdate(Connection.GetDialect(), Row.Table, string.Empty)
                         .Set(isDeletedRow.IsActiveField, -1)
                         .WhereEqual(idField, id)
                         .Where(new Criteria(isDeletedRow.IsActiveField) >= 0);
@@ -137,7 +137,7 @@ namespace Serenity.Services
                 }
                 else //if (deleteLogRow != null)
                 {
-                    if (new SqlUpdate(Connection.GetDialect(), Row.Table)
+                    if (new SqlUpdate(Connection.GetDialect(), Row.Table, string.Empty)
                             .Set(deleteLogRow.DeleteDateField, DateTimeField.ToDateTimeKind(DateTime.Now, 
                                         deleteLogRow.DeleteDateField.DateTimeKind))
                             .Set((Field)deleteLogRow.DeleteUserIdField, Authorization.UserId.TryParseID())

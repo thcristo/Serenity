@@ -1,5 +1,6 @@
 ﻿namespace Serenity.Data
 {
+    using Settings;
     using System;
     using System.Collections.Generic;
     using System.Text;
@@ -26,9 +27,10 @@
         ///   Creates a new SqlDelete query.</summary>
         /// <param name="tableName">
         ///   Table to delete records from (required).</param>
-        public SqlDelete(ISqlDialect dialect, string tableName) : base(dialect)
+        ///   <param name="moduleName"></param>
+        public SqlDelete(ISqlDialect dialect, string tableName, string moduleName) : base(dialect)
         {
-            Initialize(tableName);
+            Initialize(Config.Get<TablePrefixSettings>().PrefixTable(tableName, moduleName));
         }
 
         /// <summary>

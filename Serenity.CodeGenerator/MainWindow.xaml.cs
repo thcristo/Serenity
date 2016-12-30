@@ -16,6 +16,8 @@ namespace Serenity.CodeGenerator
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        private readonly string[] adminTables = new string[] { "Exceptions", "Languages", "RolePermissions",
+            "Roles", "UserPermissions", "UserPreferences", "UserRoles", "Users" };
         private BindingList<GeneratorConfig.Connection> _connections;
         private BindingList<TableItem> _tables;
         private GeneratorConfig config;
@@ -512,14 +514,15 @@ namespace Serenity.CodeGenerator
                         foreach (var t in SqlSchemaInfo.GetTableNames(connection))
                         {
                             var table = conn != null ? conn.Tables.FirstOrDefault(x => x.Tablename == t.Tablename) : null;
-                            var identifier = (table == null || table.Identifier.IsEmptyOrNull()) ?
-                                RowGenerator.ClassNameFromTableName(t.Table) : table.Identifier;
                             var permission = table == null ? "Administration:General" : table.PermissionKey;
                             var connectionKey = (table != null && !table.ConnectionKey.IsEmptyOrNull()) ?
                                 table.ConnectionKey : conn.Key;
-
                             var module = (table != null && table.Module != null) ? table.Module :
-                                Inflector.Inflector.Capitalize(connectionKey);
+                                this.adminTables.Any(atbl => $"{config.TablePrefixSettings?.ModulePrefixes?["Administration"]}_{atbl}".Equals(t.Tablename, StringComparison.InvariantCultureIgnoreCase)) ? 
+                                "Administration"
+                                : Inflector.Inflector.Capitalize(connectionKey);
+                            var identifier = (table == null || table.Identifier.IsEmptyOrNull()) ?
+                                RowGenerator.UnprefixTable(RowGenerator.ClassNameFromTableName(t.Table), module, this.config, false) : table.Identifier;
 
                             var tableItem = new TableItem
                             {
@@ -541,8 +544,15 @@ namespace Serenity.CodeGenerator
                                     t2.Tablename = tableItem.FullName;
                                     conn.Tables.Add(t2);
                                 }
-                                t2.Identifier = tableItem.Identifier;
                                 t2.Module = tableItem.Module;
+                                if (e2.PropertyName.Equals("Module"))
+                                {
+                                    t2.Identifier = RowGenerator.UnprefixTable(t2.Tablename, t2.Module, this.config, true);
+                                }
+                                else
+                                {
+                                    t2.Identifier = tableItem.Identifier;
+                                }
                                 t2.ConnectionKey = tableItem.ConnectionKey;
                                 t2.PermissionKey = tableItem.PermissionKey;
                                 this.config.Save();

@@ -42,7 +42,7 @@ namespace Serenity.Services
             if (isActiveForeign == null)
                 return;
 
-            ServiceHelper.CheckParentNotDeleted(handler.UnitOfWork.Connection, foreignRow.Table, 
+            ServiceHelper.CheckParentNotDeleted(handler.UnitOfWork.Connection, foreignRow.Table, string.Empty,
                 query => query.Where(
                     new Criteria((Field)idForeign.IdField) == parentId.Value &
                     new Criteria(isActiveForeign.IsActiveField) < 0));

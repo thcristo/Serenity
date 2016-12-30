@@ -23,7 +23,7 @@ namespace Serenity.Data
         /// <returns>
         ///   One more of maximum display order values of records in the group. 
         ///   If none, 1.</returns>
-        public static int GetNextValue(IDbConnection connection, string tableName, 
+        public static int GetNextValue(IDbConnection connection, string tableName, string moduleName, 
             Field orderField, ICriteria filter)
         {
             if (connection == null)
@@ -37,7 +37,7 @@ namespace Serenity.Data
                 new SqlQuery(connection.GetDialect()).Select(
                     Sql.Max(orderField.Name))
                 .From(
-                    tableName, Alias.T0)
+                    tableName, moduleName, Alias.T0)
                 .Where(
                     filter)))
             {
@@ -61,7 +61,7 @@ namespace Serenity.Data
         ///   If none, 1.</returns>
         public static int GetNextValue(IDbConnection connection, IDisplayOrderRow row, ICriteria filter = null)
         {
-            return GetNextValue(connection, ((Row)row).Table, row.DisplayOrderField, filter);
+            return GetNextValue(connection, ((Row)row).Table, string.Empty, row.DisplayOrderField, filter);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Serenity.Data
         ///   order value assigned (or 0) be shown at start or at the end.</param>
         /// <returns>
         ///   If any of the display order values is changed true.</returns>
-        public static bool ReorderValues(IDbConnection connection, string tableName, Field keyField, Field orderField,
+        public static bool ReorderValues(IDbConnection connection, string tableName, string moduleName, Field keyField, Field orderField,
             ICriteria filter = null, Int64? recordID = null, int newDisplayOrder = 1,
             bool descendingKeyOrder = false, bool hasUniqueConstraint = false)
         {
@@ -118,7 +118,7 @@ namespace Serenity.Data
                     keyField,
                     orderField)
                 .From(
-                    tableName, Alias.T0)
+                    tableName, moduleName, Alias.T0)
                 .Where(
                     filter)
                 .OrderBy(
@@ -373,7 +373,7 @@ namespace Serenity.Data
         public static bool ReorderValues(IDbConnection connection, IDisplayOrderRow row, ICriteria filter = null, 
             Int64? recordID = null, int newDisplayOrder = 1, bool descendingKeyOrder = false, bool hasUniqueConstraint = false)
         {
-            return ReorderValues(connection, ((Row)row).Table, (Field)((IIdRow)row).IdField, row.DisplayOrderField, filter, recordID, 
+            return ReorderValues(connection, ((Row)row).Table, string.Empty, (Field)((IIdRow)row).IdField, row.DisplayOrderField, filter, recordID, 
                 newDisplayOrder, descendingKeyOrder, hasUniqueConstraint);
         }
 

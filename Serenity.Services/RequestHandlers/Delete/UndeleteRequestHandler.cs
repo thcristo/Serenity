@@ -186,7 +186,7 @@ namespace Serenity.Services
             {
                 OnBeforeUndelete();
 
-                var update = new SqlUpdate(unitOfWork.Connection.GetDialect(), Row.Table)
+                var update = new SqlUpdate(unitOfWork.Connection.GetDialect(), Row.Table, string.Empty)
                     .WhereEqual(idField, id);
 
                 if (isDeletedRow != null)

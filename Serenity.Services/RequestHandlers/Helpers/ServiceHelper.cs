@@ -59,9 +59,9 @@ namespace Serenity.Services
     //            throw DataValidation.RelatedRecordExist(tableName);
     //    }
 
-        public static void CheckParentNotDeleted(IDbConnection connection, string tableName, Action<SqlQuery> filter)
+        public static void CheckParentNotDeleted(IDbConnection connection, string tableName, string moduleName, Action<SqlQuery> filter)
         {
-            var query = new SqlQuery(connection.GetDialect()).Select("1").From(tableName, Alias.T0);
+            var query = new SqlQuery(connection.GetDialect()).Select("1").From(tableName, moduleName, Alias.T0);
             filter(query);
             if (query.Take(1).Exists(connection))
                 throw DataValidation.ParentRecordDeleted(tableName);

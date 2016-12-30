@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using Dictionary = System.Collections.Generic.Dictionary<string, object>;
     using System.Globalization;
+    using Settings;
 
     /// <summary>
     ///   Generates queries of the form <c>UPDATE tablename SET field1 = value1, field2 = value2 ... fieldN = valueN WHERE [filter]</c>.</summary>
@@ -33,9 +34,10 @@
         /// <param name="dialect"></param>
         /// <param name="tableName">
         ///   Tablename (required).</param>
-        public SqlUpdate(ISqlDialect dialect, string tableName) : base(dialect)
+        ///   <param name="moduleName"></param>
+        public SqlUpdate(ISqlDialect dialect, string tableName, string moduleName) : base(dialect)
         {
-            Initialize(tableName);
+            Initialize(Config.Get<TablePrefixSettings>().PrefixTable(tableName, moduleName));
         }
 
 
@@ -236,7 +238,7 @@
         ///   A new clone.</returns>
         public SqlUpdate Clone()
         {
-            SqlUpdate clone = new SqlUpdate(this.dialect, _tableName);
+            SqlUpdate clone = new SqlUpdate(this.dialect, _tableName, string.Empty);
             clone._nameValuePairs.AddRange(this._nameValuePairs);
             clone._where.Append(this._where.ToString());
             if (this._params != null)

@@ -73,7 +73,7 @@ namespace Serenity.Services
 
                     if (idField.IndexCompare(Old, Row) != 0)
                     {
-                        var update = new SqlUpdate(Connection.GetDialect(), Row.Table);
+                        var update = new SqlUpdate(Connection.GetDialect(), Row.Table, string.Empty);
                         update.Set(Row);
                         update.Where(idField == new ValueCriteria(idField.AsObject(Old)));
                         update.Execute(Connection, ExpectedRows.One);

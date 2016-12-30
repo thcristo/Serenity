@@ -247,7 +247,7 @@ namespace Serenity.Data
             where TRow: Row, IIdRow, new()
         {
             var row = new TRow();
-            return new SqlDelete(connection.GetDialect(), row.Table)
+            return new SqlDelete(connection.GetDialect(), row.Table, string.Empty)
                 .Where((Field)row.IdField == new ValueCriteria(id))
                 .Execute(connection, expectedRows);
         }
@@ -257,7 +257,7 @@ namespace Serenity.Data
             if (row == null)
                 throw new ArgumentNullException("row");
 
-            var insert = new SqlInsert(dialect, row.Table);
+            var insert = new SqlInsert(dialect, row.Table, string.Empty);
             
             insert.Set(row);
 
@@ -277,7 +277,7 @@ namespace Serenity.Data
             if (row == null)
                 throw new ArgumentNullException("row");
 
-            var update = new SqlUpdate(dialect, row.Table);
+            var update = new SqlUpdate(dialect, row.Table, string.Empty);
 
             update.Set((Row)row, (Field)(row.IdField));
             var idField = (Field)row.IdField;

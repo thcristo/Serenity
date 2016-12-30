@@ -136,6 +136,7 @@
     <Compile Include="Dialects\SqlServer2012Dialect.cs" />
     <Compile Include="Dialects\SqlServer2005Dialect.cs" />
     <Compile Include="Dialects\SqlServer2000Dialect.cs" />
+    <Compile Include="Settings\TablePrefixSettings.cs" />
     <Compile Include="SqlHelpers\Dapper.cs" />
     <Compile Include="SqlHelpers\Sql.cs" />
     <Compile Include="FluentSql\SqlDelete.cs" />

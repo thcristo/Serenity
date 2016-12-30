@@ -1,4 +1,5 @@
 ﻿using Serenity.Configuration;
+using Serenity.Data.Settings;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,7 +36,8 @@ namespace Serenity.CodeGenerator
         public bool GenerateGridEditorDialog { get; set; }
         public bool GenerateLookupEditor { get; set; }
         public bool MaximizableDialog { get; set; }
-                
+        public TablePrefixSettings TablePrefixSettings { get; set; }     
+
         public GeneratorConfig()
         {
             Connections = new List<Connection>();
@@ -184,6 +186,18 @@ namespace Serenity.CodeGenerator
                                 connection.ProviderName = prov.Value;
                             }
                         }
+                    }
+
+                    //read TablePrefixSettings
+                    var tablePrefixSettingsNode = xml.SelectSingleNode("//configuration/appSettings/add[@key='TablePrefixSettings']");
+                    if (tablePrefixSettingsNode != null)
+                    {
+                        var value = tablePrefixSettingsNode.Attributes["value"].Value;
+                        this.TablePrefixSettings = JSON.ParseTolerant<TablePrefixSettings>(value);
+                    }
+                    else
+                    {
+                        this.TablePrefixSettings = new TablePrefixSettings { ModulePrefixes = new Dictionary<string, string>() };
                     }
                 }
                 catch (Exception ex)

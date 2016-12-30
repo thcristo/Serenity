@@ -1,5 +1,6 @@
 ﻿using Serenity.ComponentModel;
 using Serenity.Data.Mapping;
+using Serenity.Data.Settings;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -34,9 +35,9 @@ namespace Serenity.Data
         internal string alias;
         internal string aliasDot;
 
-        protected RowFieldsBase(string tableName = null, string fieldPrefix = "")
+        protected RowFieldsBase(string tableName, string moduleName,  string fieldPrefix = "")
         {
-            this.tableName = tableName;
+            this.tableName = Config.Get<TablePrefixSettings>().PrefixTable(tableName, moduleName);
             this.alias = "T0";
             this.aliasDot = "T0.";
             this.fieldPrefix = fieldPrefix;

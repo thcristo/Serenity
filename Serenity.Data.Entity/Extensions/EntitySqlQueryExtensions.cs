@@ -35,7 +35,7 @@ namespace Serenity.Data
                 if (alias != null && (alias.Name == "t0" || alias.Name == "T0") && alias.Table == entity.Table)
                     query.From(alias);
                 else
-                    query.From(entity.Table, Alias.T0);
+                    query.From(entity.Table, string.Empty, Alias.T0);
             }
             
             return query.Into(entity);
