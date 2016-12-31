@@ -61,12 +61,12 @@ WriteLiteral(".Entities\r\n{\r\n    using Serenity;\r\n    using Serenity.Compon
 WriteLiteral("\"), DisplayName(\"");
 
 
-                                                    Write(Model.Tablename);
+                                                    Write(Model.ClassName);
 
 WriteLiteral("\"), InstanceName(\"");
 
 
-                                                                                      Write(Model.Tablename);
+                                                                                      Write(Model.ClassName);
 
 WriteLiteral("\"), TwoLevelCached]\r\n    [ReadPermission(\"");
 
@@ -292,10 +292,15 @@ WriteLiteral("\r\n\r\n            public RowFields()\r\n                : base(\
 
                     Write(String.IsNullOrEmpty(schemaDot) ? Model.Tablename : schemaDot + "[" + Model.Tablename + "]");
 
+WriteLiteral("\",\"");
+
+
+                                                                                                                     Write(Model.Module);
+
 WriteLiteral("\"");
 
 
-                                                                                                                   Write(string.IsNullOrEmpty(Model.FieldPrefix) ? "" : (", \"" + Model.FieldPrefix + "\""));
+                                                                                                                                     Write(string.IsNullOrEmpty(Model.FieldPrefix) ? "" : (", \"" + Model.FieldPrefix + "\""));
 
 WriteLiteral(")\r\n            {\r\n                LocalTextPrefix = \"");
 

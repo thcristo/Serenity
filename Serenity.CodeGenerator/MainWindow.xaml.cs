@@ -522,7 +522,7 @@ namespace Serenity.CodeGenerator
                                 "Administration"
                                 : Inflector.Inflector.Capitalize(connectionKey);
                             var identifier = (table == null || table.Identifier.IsEmptyOrNull()) ?
-                                RowGenerator.UnprefixTable(RowGenerator.ClassNameFromTableName(t.Table), module, this.config, false) : table.Identifier;
+                                RowGenerator.ClassNameFromTableName(RowGenerator.UnprefixTable(t.Table, module, this.config)) : table.Identifier;
 
                             var tableItem = new TableItem
                             {
@@ -547,12 +547,9 @@ namespace Serenity.CodeGenerator
                                 t2.Module = tableItem.Module;
                                 if (e2.PropertyName.Equals("Module"))
                                 {
-                                    t2.Identifier = RowGenerator.UnprefixTable(t2.Tablename, t2.Module, this.config, true);
+                                    tableItem.Identifier = RowGenerator.ClassNameFromTableName(RowGenerator.UnprefixTable(t2.Tablename, t2.Module, this.config));
                                 }
-                                else
-                                {
-                                    t2.Identifier = tableItem.Identifier;
-                                }
+                                t2.Identifier = tableItem.Identifier;
                                 t2.ConnectionKey = tableItem.ConnectionKey;
                                 t2.PermissionKey = tableItem.PermissionKey;
                                 this.config.Save();

@@ -128,7 +128,7 @@ namespace Serenity.CodeGenerator
             var className = entityClass ?? ClassNameFromTableName(table);
             model.ClassName = className;
             model.RowClassName = className + "Row";
-            model.Tablename = UnprefixTable(table, module, config, true);
+            model.Tablename = UnprefixTable(table, module, config);
             model.Fields = new List<EntityField>();
             model.Joins = new List<EntityJoin>();
             model.Instance = true;
@@ -326,7 +326,7 @@ namespace Serenity.CodeGenerator
 
         }
 
-        public static string UnprefixTable(string tableName, string moduleName, GeneratorConfig config, bool hasUnderscore)
+        public static string UnprefixTable(string tableName, string moduleName, GeneratorConfig config)
         {
             if (string.IsNullOrWhiteSpace(tableName) || string.IsNullOrWhiteSpace(moduleName)
                 || config.TablePrefixSettings == null || config.TablePrefixSettings.ModulePrefixes == null
@@ -336,11 +336,7 @@ namespace Serenity.CodeGenerator
             }
             else
             {
-                var start = config.TablePrefixSettings.ModulePrefixes[moduleName];
-                if (hasUnderscore)
-                {
-                    start = start + "_";
-                }
+                var start = config.TablePrefixSettings.ModulePrefixes[moduleName] + "_";
 
                 if (tableName.StartsWith(start, StringComparison.InvariantCultureIgnoreCase))
                 {
