@@ -239,5 +239,12 @@ namespace Serenity.Data
                 return true;
             }
         }
+        public override string ServerType
+        {
+            get
+            {
+                return "Postgres";
+            }
+        }
     }
 }

@@ -218,7 +218,7 @@ namespace Serenity.Services
         {
             get
             {
-                return false;
+                throw new NotImplementedException();
             }
         }
 
@@ -234,7 +234,15 @@ namespace Serenity.Services
         {
             get
             {
-                return true;
+                throw new NotImplementedException();
+            }
+        }
+
+        public override string ServerType
+        {
+            get
+            {
+                throw new NotImplementedException();
             }
         }
     }

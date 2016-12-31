@@ -39,6 +39,7 @@ namespace Serenity.Data
         public abstract string QuoteColumnAlias(string s);
         public abstract string QuoteIdentifier(string s);
         public abstract string QuoteUnicodeString(string s);
+        public abstract string ServerType { get; }
         public virtual SqlDataTypeInfo SqlTypeNameToDataType(string sqlTypeName, int size)
         {
             var result = new SqlDataTypeInfo();
@@ -88,6 +89,11 @@ namespace Serenity.Data
                 result.DataType = "Stream";
 
             return result;
+        }
+
+        public virtual bool NeedsBoolWorkaround
+        {
+            get { return false; }
         }
     }
 }

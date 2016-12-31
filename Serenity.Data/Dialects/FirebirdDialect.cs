@@ -257,5 +257,13 @@ namespace Serenity.Data
                 return base.SqlTypeNameToDataType(sqlTypeName, size);
             }
         }
+
+        public override string ServerType
+        {
+            get
+            {
+                return "Firebird";
+            }
+        }
     }
 }

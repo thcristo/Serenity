@@ -274,5 +274,21 @@ namespace Serenity.Data
                 return true;
             }
         }
+
+        public override bool NeedsBoolWorkaround
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override string ServerType
+        {
+            get
+            {
+                return "Oracle";
+            }
+        }
     }
 }

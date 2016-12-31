@@ -52,7 +52,7 @@ namespace Serenity.CodeGenerator
             var inf = InformationSchema(connection);
             List<string> primaryFields = new List<string>();
 
-            if (connection.GetDialect() is FirebirdDialect)
+            if (connection.GetDialect().ServerType == "Firebird")
             {
                 var query = @"
 select
@@ -95,8 +95,8 @@ order by 3";
                 return primaryFields;
             }
 
-            if (connection.GetDialect() is MySqlDialect ||
-                connection.GetDialect().GetType().Name.StartsWith("SqlServer"))
+            if (connection.GetDialect().ServerType.StartsWith("MySql", StringComparison.OrdinalIgnoreCase) ||
+                connection.GetDialect().ServerType.StartsWith("SqlServer", StringComparison.OrdinalIgnoreCase))
             {
                 var query = new SqlQuery(connection.GetDialect()).Select(
                         "KCU.COLUMN_NAME")
@@ -128,7 +128,7 @@ order by 3";
             var columns = ((DbConnection)((WrappedConnection)connection).ActualConnection).GetSchema("Columns", new string[] { null, schema, tableName, null });
             List<string> identityFields = new List<string>();
 
-            if (connection.GetDialect() is FirebirdDialect)
+            if (connection.GetDialect().ServerType.StartsWith("Firebird", StringComparison.OrdinalIgnoreCase))
             {
                 //first column should always be of data type integer or bigint, primary key and auto generated
                 string pkDataType = (string)columns.Rows[0]["COLUMN_DATA_TYPE"];
@@ -141,7 +141,7 @@ order by 3";
                 return identityFields;
             }
 
-            if (connection.GetDialect() is PostgresDialect)
+            if (connection.GetDialect().ServerType.StartsWith("Postgres", StringComparison.OrdinalIgnoreCase))
             {
                 foreach (DataRow row in columns.Rows)
                 {
@@ -153,7 +153,7 @@ order by 3";
                 return identityFields;
             }
 
-            if (connection.GetDialect() is MySqlDialect)
+            if (connection.GetDialect().ServerType.StartsWith("MySql", StringComparison.OrdinalIgnoreCase))
             {
                 foreach (DataRow row in columns.Rows)
                 {
@@ -178,7 +178,7 @@ order by 3";
             }
 
 
-            if (connection.GetDialect().GetType().Name.StartsWith("SqlServer"))
+            if (connection.GetDialect().ServerType.StartsWith("SqlServer", StringComparison.OrdinalIgnoreCase))
             {
                 new SqlQuery(connection.GetDialect()).Select(
                     "C.NAME")
@@ -222,7 +222,7 @@ order by 3";
             var inf = InformationSchema(connection);
             List<ForeignKeyInfo> foreignKeyInfos = new List<ForeignKeyInfo>();
 
-            if (connection.GetDialect() is SqliteDialect)
+            if (connection.GetDialect().ServerType.StartsWith("Sqlite", StringComparison.OrdinalIgnoreCase))
             {
                 try
                 {
@@ -250,7 +250,7 @@ order by 3";
                 return foreignKeyInfos;
             }
 
-            if (connection.GetDialect() is FirebirdDialect)
+            if (connection.GetDialect().ServerType.StartsWith("Firebird", StringComparison.OrdinalIgnoreCase))
             {
                 var query = @"
 select 
@@ -303,7 +303,7 @@ order by 1, 5";
                 return foreignKeyInfos;
             }
 
-            if (connection.GetDialect() is PostgresDialect)
+            if (connection.GetDialect().ServerType.StartsWith("Postgres", StringComparison.OrdinalIgnoreCase))
             {
                 try
                 {
@@ -367,7 +367,7 @@ order by 1, 5";
                 return foreignKeyInfos;
             }
 
-            if (connection.GetDialect() is MySqlDialect)
+            if (connection.GetDialect().ServerType.StartsWith("MySql", StringComparison.OrdinalIgnoreCase))
             {
                 using (var reader =
                     SqlHelper.ExecuteReader(connection,
@@ -395,7 +395,7 @@ order by 1, 5";
                 return foreignKeyInfos;
             }
 
-            if (connection.GetDialect().GetType().Name.StartsWith("SqlServer"))
+            if (connection.GetDialect().ServerType.StartsWith("SqlServer", StringComparison.OrdinalIgnoreCase))
             {
                 var c = new Alias(inf + "REFERENTIAL_CONSTRAINTS", "c");
                 var fk = new Alias(inf + "CONSTRAINT_COLUMN_USAGE", "fk");
