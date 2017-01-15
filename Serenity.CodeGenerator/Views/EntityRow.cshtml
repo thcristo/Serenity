@@ -22,7 +22,7 @@ namespace @(Model.RootNamespace)@(dotModule).Entities
     using System.ComponentModel;
     using System.IO;
 
-    [ConnectionKey("@Model.ConnectionKey"), DisplayName("@Model.ClassName"), InstanceName("@Model.ClassName"), TwoLevelCached]
+    [ConnectionKey("@Model.ConnectionKey"), DisplayName("@(Model.ClassName + "s")"), InstanceName("@Model.ClassName"), TwoLevelCached]
     [ReadPermission("@Model.Permission")]
     [ModifyPermission("@Model.Permission")]
     public sealed class @Model.RowClassName : @Model.RowBaseClass, IIdRow@(Model.IsLookup ? ", IDbLookupRow" : "")@(Model.NameField == null ? "" : ", INameRow")

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serenity.Data.Settings;
+using System;
 
 namespace Serenity.Data.Mapping
 {
@@ -14,10 +15,11 @@ namespace Serenity.Data.Mapping
         /// </summary>
         /// <param name="table">Primary key table</param>
         /// <param name="field">Matching column in primary key table</param>
-        public ForeignKeyAttribute(string table, string field)
+        /// <param name="moduleName">Module of the foreign table</param>
+        public ForeignKeyAttribute(string table, string field, string moduleName)
         {
             this.Field = field;
-            this.Table = table;
+            this.Table = Config.Get<TablePrefixSettings>().PrefixTable(table, moduleName); ;
         }
 
         public string Field { get; private set; }
