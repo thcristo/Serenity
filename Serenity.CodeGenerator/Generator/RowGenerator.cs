@@ -230,7 +230,7 @@ namespace Serenity.CodeGenerator
                         f.Title = f.Title.SafeSubstring(0, f.Title.Length - 3);
 
                     f.PKSchema = foreign.PKSchema;
-                    f.PKTable = foreign.PKTable;
+                    f.PKTable = UnprefixTable(foreign.PKTable, module, config);
                     f.PKColumn = foreign.PKColumn;
 
                     var frgfld = SqlSchemaInfo.GetTableFieldInfos(connection, foreign.PKSchema, foreign.PKTable);

@@ -22,7 +22,7 @@ namespace @(Model.RootNamespace)@(dotModule).Entities
     using System.ComponentModel;
     using System.IO;
 
-    [ConnectionKey("@Model.ConnectionKey"), DisplayName("@(Model.ClassName + "s")"), InstanceName("@Model.ClassName"), TwoLevelCached]
+    [ConnectionKey("@Model.ConnectionKey"), DisplayName("@Model.ClassName"), InstanceName("@Model.ClassName"), TwoLevelCached]
     [ReadPermission("@Model.Permission")]
     [ModifyPermission("@Model.Permission")]
     public sealed class @Model.RowClassName : @Model.RowBaseClass, IIdRow@(Model.IsLookup ? ", IDbLookupRow" : "")@(Model.NameField == null ? "" : ", INameRow")
@@ -45,7 +45,7 @@ namespace @(Model.RootNamespace)@(dotModule).Entities
         attrs.Add(x.Flags);
     }       
     if (!String.IsNullOrEmpty(x.PKTable)) {
-        attrs.Add("ForeignKey(\"" + (string.IsNullOrEmpty(x.PKSchema) ? x.PKTable : ("[" + x.PKSchema + "].[" + x.PKTable + "]")) + "\", \"" + x.PKColumn + "\")");
+        attrs.Add("ForeignKey(\"" + (string.IsNullOrEmpty(x.PKSchema) ? x.PKTable : ("[" + x.PKSchema + "].[" + x.PKTable + "]")) + "\", \"" + x.PKColumn + "\", \"" + Model.Module + "\")");
         attrs.Add("LeftJoin(\"j" + x.ForeignJoinAlias + "\")");
     }
     if (Model.NameField == x.Ident) {

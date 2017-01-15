@@ -61,12 +61,12 @@ WriteLiteral(".Entities\r\n{\r\n    using Serenity;\r\n    using Serenity.Compon
 WriteLiteral("\"), DisplayName(\"");
 
 
-                                                     Write(Model.ClassName + "s");
+                                                    Write(Model.ClassName);
 
 WriteLiteral("\"), InstanceName(\"");
 
 
-                                                                                              Write(Model.ClassName);
+                                                                                      Write(Model.ClassName);
 
 WriteLiteral("\"), TwoLevelCached]\r\n    [ReadPermission(\"");
 
@@ -118,7 +118,7 @@ WriteLiteral(", IIdRow");
         attrs.Add(x.Flags);
     }       
     if (!String.IsNullOrEmpty(x.PKTable)) {
-        attrs.Add("ForeignKey(\"" + (string.IsNullOrEmpty(x.PKSchema) ? x.PKTable : ("[" + x.PKSchema + "].[" + x.PKTable + "]")) + "\", \"" + x.PKColumn + "\")");
+        attrs.Add("ForeignKey(\"" + (string.IsNullOrEmpty(x.PKSchema) ? x.PKTable : ("[" + x.PKSchema + "].[" + x.PKTable + "]")) + "\", \"" + x.PKColumn + "\", \"" + Model.Module + "\")");
         attrs.Add("LeftJoin(\"j" + x.ForeignJoinAlias + "\")");
     }
     if (Model.NameField == x.Ident) {
