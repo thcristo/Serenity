@@ -47,9 +47,19 @@
                     break;
 
                 case CriteriaOperator.Exists:
-                    sb.Append("EXISTS (");
-                    this.operand.ToString(sb, query);
-                    sb.Append(')');
+                    sb.Append("EXISTS ");
+                    var tempsb = new StringBuilder();
+                    this.operand.ToString(tempsb, query);
+                    var str = tempsb.ToString().Trim();
+                    if (!str.StartsWith("("))
+                    {
+                        sb.Append("(");
+                    }
+                    sb.Append(str);
+                    if (!str.StartsWith("("))
+                    {
+                        sb.Append(')');
+                    }
                     break;
             }
         }
